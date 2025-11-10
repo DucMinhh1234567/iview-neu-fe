@@ -129,6 +129,26 @@ export const api = {
     return handleResponse(response);
   },
 
+  async createExamSession(data: {
+    session_name: string;
+    course_name: string;
+    material_id: number;
+    difficulty_level: string;
+    password: string;
+    start_time: string;
+    end_time: string;
+    time_limit?: number;
+    language?: string;
+  }) {
+    const response = await fetch(`${BASE}/api/sessions/exam`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
   async uploadCV(file: File, sessionId: string) {
     const formData = new FormData();
     formData.append('file', file);
@@ -421,6 +441,123 @@ export const api = {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify({ lecturer_feedback: feedback }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  // Questions Management
+  async generateQuestions(sessionId: number, numQuestions?: number) {
+    const response = await fetch(`${BASE}/api/questions/generate`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ session_id: sessionId, num_questions: numQuestions }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async getQuestions(sessionId: number, status?: string) {
+    const queryParams = status ? `?status=${status}` : '';
+    const response = await fetch(`${BASE}/api/questions/session/${sessionId}${queryParams}`, {
+      headers: getAuthHeaders(),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async updateQuestion(questionId: number, data: { content?: string; keywords?: string; difficulty?: string }) {
+    const response = await fetch(`${BASE}/api/questions/${questionId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async deleteQuestion(questionId: number) {
+    const response = await fetch(`${BASE}/api/questions/${questionId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async approveQuestions(sessionId: number, questionIds?: number[]) {
+    const response = await fetch(`${BASE}/api/questions/approve`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ session_id: sessionId, question_ids: questionIds }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async generateAnswers(sessionId: number, questionIds?: number[]) {
+    const response = await fetch(`${BASE}/api/questions/generate-answers`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ session_id: sessionId, question_ids: questionIds }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async updateAnswer(questionId: number, referenceAnswer: string) {
+    const response = await fetch(`${BASE}/api/questions/${questionId}/answer`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ reference_answer: referenceAnswer }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async approveAnswers(sessionId: number, questionIds?: number[]) {
+    const response = await fetch(`${BASE}/api/questions/approve-answers`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ session_id: sessionId, question_ids: questionIds }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  // Scripts Management
+  async generateScript(sessionId: number) {
+    const response = await fetch(`${BASE}/api/sessions/${sessionId}/generate-script`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async getScript(sessionId: number) {
+    const response = await fetch(`${BASE}/api/sessions/${sessionId}/script`, {
+      headers: getAuthHeaders(),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  async updateScript(sessionId: number, openingScript?: string, closingScript?: string) {
+    const response = await fetch(`${BASE}/api/sessions/${sessionId}/script`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ opening_script: openingScript, closing_script: closingScript }),
+      cache: 'no-store',
+    });
+    return handleResponse(response);
+  },
+
+  // Finalize Session
+  async finalizeSession(sessionId: number) {
+    const response = await fetch(`${BASE}/api/sessions/${sessionId}/finalize`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
       cache: 'no-store',
     });
     return handleResponse(response);

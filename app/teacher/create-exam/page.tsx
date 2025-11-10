@@ -118,16 +118,66 @@ export default function CreateExamPage() {
       return;
     }
 
+    // NeuReader is not implemented yet
+    if (materialSource === 'neureader') {
+      setError('Tính năng NeuReader chưa được hỗ trợ. Vui lòng chọn tài liệu đã upload.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      // Demo-only: simulate creation
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert('Đã tạo buổi thi thành công! (Demo mode)');
-      router.push('/teacher/dashboard');
+      // Convert bloom levels array to highest level (backend expects single level)
+      // Bloom levels order: remember < understand < apply < analyze < evaluate < create
+      const bloomOrder = ['remember', 'understand', 'apply', 'analyze', 'evaluate', 'create'];
+      const highestLevel = bloomLevel.reduce((highest, current) => {
+        const currentIndex = bloomOrder.indexOf(current.toLowerCase());
+        const highestIndex = bloomOrder.indexOf(highest.toLowerCase());
+        return currentIndex > highestIndex ? current : highest;
+      }, bloomLevel[0]);
+      
+      // Convert to uppercase for backend
+      const difficultyLevel = highestLevel.toUpperCase();
+
+      // Format datetime for backend (ISO format)
+      // Convert from datetime-local format (YYYY-MM-DDTHH:mm) to ISO format
+      const formatDateTime = (dateTimeStr: string) => {
+        if (!dateTimeStr) return null;
+        // datetime-local returns format: YYYY-MM-DDTHH:mm
+        // We need to convert to ISO format: YYYY-MM-DDTHH:mm:ss
+        // Backend expects ISO format, so we'll add seconds if not present
+        if (dateTimeStr.length === 16) {
+          return dateTimeStr + ':00';
+        }
+        return dateTimeStr;
+      };
+
+      // Prepare data for API
+      const examData = {
+        session_name: examName,
+        course_name: subjectName,
+        material_id: parseInt(selectedMaterial),
+        difficulty_level: difficultyLevel,
+        password: password,
+        start_time: formatDateTime(startTime),
+        end_time: formatDateTime(endTime),
+        time_limit: parseInt(timeLimit), // Optional, may not be stored in backend
+        language: language // Optional, may not be stored in backend
+      };
+
+      // Call API to create exam session
+      const result = await api.createExamSession(examData);
+      
+      if (result.session_id) {
+        // Success - redirect to session detail page where teacher can generate questions
+        router.push(`/teacher/exams/${result.session_id}`);
+      } else {
+        throw new Error('Không nhận được session_id từ server');
+      }
     } catch (err) {
-      setError('Có lỗi xảy ra khi tạo buổi thi');
+      console.error('Create exam error:', err);
+      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo buổi thi');
     } finally {
       setLoading(false);
     }

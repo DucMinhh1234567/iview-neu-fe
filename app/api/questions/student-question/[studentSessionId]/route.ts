@@ -5,10 +5,15 @@ export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export async function GET(_req: NextRequest, ctx: { params: Promise<{ filename: string }> | { filename: string } }) {
+export async function GET(
+  request: NextRequest,
+  ctx: { params: Promise<{ studentSessionId: string }> | { studentSessionId: string } }
+) {
   try {
-    const p = (ctx.params as any);
-    const studentSessionId = typeof p.then === 'function' ? (await (p as Promise<{ filename: string }>)).filename : (p as { filename: string }).filename;
+    const p: any = (typeof (ctx as any).params?.then === 'function') 
+      ? await (ctx as any).params 
+      : (ctx as any).params;
+    const studentSessionId = (p.studentSessionId as string);
     
     if (!studentSessionId) {
       return Response.json(
@@ -18,7 +23,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ filename: 
     }
     
     // Get authorization header if present
-    const authHeader = _req.headers.get('Authorization');
+    const authHeader = request.headers.get('Authorization');
     
     // Prepare headers for Flask backend
     const headers: HeadersInit = {
