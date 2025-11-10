@@ -5,17 +5,12 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Handle params as Promise (Next.js 15+) or object
-    let lecturerId: string;
-    if (params && typeof params === 'object' && 'then' in params) {
-      const resolvedParams = await params;
-      lecturerId = resolvedParams.id;
-    } else {
-      lecturerId = (params as { id: string }).id;
-    }
+    // Next.js 16 requires params to be Promise
+    const resolvedParams = await ctx.params;
+    const lecturerId = resolvedParams.id;
     
     if (!lecturerId) {
       return Response.json(
