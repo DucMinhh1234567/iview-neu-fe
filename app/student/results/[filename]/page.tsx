@@ -6,6 +6,14 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { api } from '@/lib/api';
 
+interface FeedbackObject {
+  overall_score?: number;
+  strengths?: string;
+  weaknesses?: string;
+  hiring_recommendation?: string;
+  overall_feedback?: string;
+}
+
 export default function ResultDetailPage() {
   const params = useParams<{ filename: string }>();
   const filename = decodeURIComponent(params.filename);
@@ -61,9 +69,12 @@ export default function ResultDetailPage() {
     load();
   }, [filename]);
 
-  const summary = data?.summary || (typeof data?.summary === 'string' ? data.summary : '');
+  const summary = data?.summary || '';
   const details = data?.details || [];
-  const feedback = typeof summary === 'string' ? summary : (summary?.overall_feedback as (undefined | { overall_score?: number; strengths?: string; weaknesses?: string; hiring_recommendation?: string }));
+  // feedback can be either a string or an object with feedback properties
+  const feedback: string | FeedbackObject | undefined = typeof summary === 'string' 
+    ? summary 
+    : (typeof summary === 'object' && summary !== null ? summary as FeedbackObject : undefined);
 
   return (
     <div className="min-h-screen">
@@ -117,7 +128,14 @@ export default function ResultDetailPage() {
                 </div>
                 <div>
                   <div className="font-semibold mb-2">Nhận xét</div>
-                  <p className="text-gray-700 whitespace-pre-wrap">{typeof feedback === 'string' ? feedback : (feedback.overall_feedback || feedback.strengths || '-')}</p>
+                  <p className="text-gray-700 whitespace-pre-wrap">
+                    {typeof feedback === 'string' 
+                      ? feedback 
+                      : (typeof feedback === 'object' && feedback !== null
+                        ? (feedback.overall_feedback || feedback.strengths || feedback.weaknesses || feedback.hiring_recommendation || '-')
+                        : '-')
+                    }
+                  </p>
                 </div>
               </section>
             )}
