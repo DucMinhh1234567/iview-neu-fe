@@ -234,16 +234,6 @@ export const api = {
     return handleResponse(response);
   },
 
-  // Legacy methods (for backward compatibility)
-  async getQuestions(filename: string) {
-    // filename is now student_session_id
-    const studentSessionId = parseInt(filename);
-    if (isNaN(studentSessionId)) {
-      throw new Error('Invalid student_session_id');
-    }
-    return api.getNextQuestion(studentSessionId);
-  },
-
   async getHistory() {
     const response = await fetch(`${BASE}/api/history`, {
       headers: getAuthHeaders(),
