@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -14,7 +14,7 @@ interface Question {
   difficulty?: string;
 }
 
-export default function InterviewPage() {
+function InterviewContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const studentSessionIdParam = searchParams.get('student_session_id');
@@ -253,6 +253,23 @@ export default function InterviewPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function InterviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
+            <div className="text-xl">Đang tải...</div>
+          </div>
+        </div>
+      }
+    >
+      <InterviewContent />
+    </Suspense>
   );
 }
 
