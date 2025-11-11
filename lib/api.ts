@@ -168,8 +168,7 @@ export const api = {
     formData.append('file', file);
     formData.append('session_id', sessionId);
 
-    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const response = await fetch(`${BACKEND_URL}/api/sessions/interview/upload-jd`, {
+    const response = await fetch(`${BASE}/api/upload-jd`, {
       method: 'POST',
       headers: getAuthHeadersFormData(),
       body: formData,
