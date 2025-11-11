@@ -1,41 +1,31 @@
+// Next.js API route to proxy requests to Flask backend for JD upload
+// Avoids CORS, captures Flask redirect, and provides useful error info
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export async function GET(
-  request: Request,
-  ctx: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: Request) {
   try {
-    // Next.js 16 requires params to be Promise
-    const resolvedParams = await ctx.params;
-    const studentSessionId = resolvedParams.id;
+    // Get form data from request
+    const formData = await request.formData();
     
-    if (!studentSessionId) {
-      return Response.json(
-        { error: 'student_session_id is required' },
-        { status: 400 }
-      );
-    }
-    
-    // Get auth token from header
+    // Get authorization header if present
     const authHeader = request.headers.get('Authorization');
     
-    const url = `${BACKEND_URL}/api/review/student-sessions/${studentSessionId}`;
-    
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
-    
+    // Prepare headers for Flask backend
+    const headers: HeadersInit = {};
     if (authHeader) {
       headers['Authorization'] = authHeader;
     }
+    // Don't set Content-Type, let fetch set it with boundary for FormData
     
-    const response = await fetch(url, {
-      method: 'GET',
+    // Forward to Flask backend
+    const response = await fetch(`${BACKEND_URL}/api/sessions/interview/upload-jd`, {
+      method: 'POST',
       headers,
-      cache: 'no-store',
+      body: formData,
     });
 
     if (!response.ok) {
@@ -44,7 +34,7 @@ export async function GET(
       try {
         errorData = JSON.parse(errorText);
       } catch {
-        errorData = { error: errorText || 'Failed to get student session detail' };
+        errorData = { error: errorText || 'Failed to upload JD' };
       }
       return Response.json(
         errorData,
@@ -55,7 +45,7 @@ export async function GET(
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.error('Get student session detail error:', error);
+    console.error('Upload JD error:', error);
     return Response.json(
       { error: error instanceof Error ? error.message : 'Failed to connect to backend server' },
       { status: 500 }

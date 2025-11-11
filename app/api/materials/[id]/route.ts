@@ -5,17 +5,12 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Handle params as Promise (Next.js 15+) or object
-    let materialId: string;
-    if (params && typeof params === 'object' && 'then' in params) {
-      const resolvedParams = await params;
-      materialId = resolvedParams.id;
-    } else {
-      materialId = (params as { id: string }).id;
-    }
+    // Next.js 16 requires params to be Promise
+    const resolvedParams = await ctx.params;
+    const materialId = resolvedParams.id;
     
     if (!materialId) {
       return Response.json(

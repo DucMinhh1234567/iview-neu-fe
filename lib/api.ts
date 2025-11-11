@@ -168,8 +168,7 @@ export const api = {
     formData.append('file', file);
     formData.append('session_id', sessionId);
 
-    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-    const response = await fetch(`${BACKEND_URL}/api/sessions/interview/upload-jd`, {
+    const response = await fetch(`${BASE}/api/upload-jd`, {
       method: 'POST',
       headers: getAuthHeadersFormData(),
       body: formData,
@@ -233,16 +232,6 @@ export const api = {
       cache: 'no-store',
     });
     return handleResponse(response);
-  },
-
-  // Legacy methods (for backward compatibility)
-  async getQuestions(filename: string) {
-    // filename is now student_session_id
-    const studentSessionId = parseInt(filename);
-    if (isNaN(studentSessionId)) {
-      throw new Error('Invalid student_session_id');
-    }
-    return api.getNextQuestion(studentSessionId);
   },
 
   async getHistory() {

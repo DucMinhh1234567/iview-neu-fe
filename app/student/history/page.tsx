@@ -6,8 +6,26 @@ import Footer from '@/components/Footer';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
+interface HistoryItem {
+  id: string;
+  log_file: string;
+  result_file?: string | null;
+  status: 'pending' | 'done';
+  candidate_name?: string;
+  session_name?: string;
+  created_at?: string;
+  session_type?: string;
+  course_name?: string;
+  score_total?: number | null;
+  summary?: {
+    type?: string;
+    overall_score?: number | null;
+    overall_feedback?: string;
+  };
+}
+
 export default function HistoryPage() {
-  const [items, setItems] = useState<Array<{ log_file: string; result_file?: string | null; status: 'pending' | 'done'; summary?: any }>>([]);
+  const [items, setItems] = useState<HistoryItem[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -19,19 +37,20 @@ export default function HistoryPage() {
         const data = await api.getHistory();
         // Backend returns: [{ student_session_id, session_id, session_name, session_type, course_name, score_total, join_time }]
         // Transform to match expected format
-        const transformed = (data || []).map((item: any) => ({
+        const transformed: HistoryItem[] = (data || []).map((item: any) => ({
           id: item.student_session_id?.toString() || '',
           log_file: item.student_session_id?.toString() || '',
           result_file: item.student_session_id?.toString() || null,
           status: item.score_total !== null && item.score_total !== undefined ? 'done' : 'pending',
           candidate_name: item.session_name || '',
+          session_name: item.session_name || '',
           created_at: item.join_time || '',
           session_type: item.session_type || '',
           course_name: item.course_name || '',
-          score_total: item.score_total,
+          score_total: item.score_total ?? null,
           summary: {
             type: item.session_type === 'EXAM' || item.session_type === 'PRACTICE' ? 'academic' : 'job',
-            overall_score: item.score_total,
+            overall_score: item.score_total ?? null,
             overall_feedback: item.ai_overall_feedback || ''
           }
         }));
@@ -60,7 +79,7 @@ export default function HistoryPage() {
     hiring_recommendation?: string;
   });
 
-  const handleView = (it: any) => {
+  const handleView = (it: HistoryItem) => {
     if (it.status === 'done' && it.result_file) {
       // Go to pretty result page using student_session_id
       router.push(`/student/results/${encodeURIComponent(it.result_file)}`);

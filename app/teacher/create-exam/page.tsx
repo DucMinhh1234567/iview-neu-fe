@@ -142,8 +142,10 @@ export default function CreateExamPage() {
 
       // Format datetime for backend (ISO format)
       // Convert from datetime-local format (YYYY-MM-DDTHH:mm) to ISO format
-      const formatDateTime = (dateTimeStr: string) => {
-        if (!dateTimeStr) return null;
+      const formatDateTime = (dateTimeStr: string): string => {
+        if (!dateTimeStr) {
+          throw new Error('DateTime is required');
+        }
         // datetime-local returns format: YYYY-MM-DDTHH:mm
         // We need to convert to ISO format: YYYY-MM-DDTHH:mm:ss
         // Backend expects ISO format, so we'll add seconds if not present
@@ -154,14 +156,15 @@ export default function CreateExamPage() {
       };
 
       // Prepare data for API
+      // Note: startTime and endTime are already validated above (line 111), so they cannot be empty
       const examData = {
         session_name: examName,
         course_name: subjectName,
         material_id: parseInt(selectedMaterial),
         difficulty_level: difficultyLevel,
         password: password,
-        start_time: formatDateTime(startTime),
-        end_time: formatDateTime(endTime),
+        start_time: formatDateTime(startTime), // Will always return string (validated above)
+        end_time: formatDateTime(endTime), // Will always return string (validated above)
         time_limit: parseInt(timeLimit), // Optional, may not be stored in backend
         language: language // Optional, may not be stored in backend
       };
