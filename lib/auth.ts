@@ -12,6 +12,16 @@ export function setAuthToken(token: string): void {
   sessionStorage.setItem('token', token); // Support both keys
 }
 
+export function getRefreshToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return sessionStorage.getItem('refreshToken');
+}
+
+export function setRefreshToken(refreshToken: string): void {
+  if (typeof window === 'undefined') return;
+  sessionStorage.setItem('refreshToken', refreshToken);
+}
+
 export function removeAuthToken(): void {
   if (typeof window === 'undefined') return;
   sessionStorage.removeItem('authToken');

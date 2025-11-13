@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { setAuthToken, setUserInfo, setupAuthCleanup } from '@/lib/auth';
+import { setAuthToken, setRefreshToken, setUserInfo, setupAuthCleanup } from '@/lib/auth';
 
 export default function TeacherLoginPage() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function TeacherLoginPage() {
       if (response.token) {
         setAuthToken(response.token);
         if (response.refresh_token) {
-          sessionStorage.setItem('refreshToken', response.refresh_token);
+          setRefreshToken(response.refresh_token);
         }
       }
       
@@ -38,6 +38,17 @@ export default function TeacherLoginPage() {
         // Normalize role: API returns "LECTURER" -> convert to "lecturer" -> normalize to "teacher"
         const role = response.user.role?.toLowerCase() || 'teacher';
         const normalizedRole = role === 'lecturer' ? 'teacher' : role;
+        
+        // Check if user role matches the login page
+        if (role !== 'lecturer' && role !== 'teacher' && role !== 'student') {
+          // Invalid role
+          throw new Error('Sai email hoặc mật khẩu.');
+        }
+        
+        if (role === 'student') {
+          // Student trying to login as teacher
+          throw new Error('Sai email hoặc mật khẩu.');
+        }
         
         setUserInfo({
           isLoggedIn: true,
@@ -52,7 +63,20 @@ export default function TeacherLoginPage() {
       router.push('/teacher/dashboard');
     } catch (err) {
       console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'Đăng nhập thất bại. Vui lòng thử lại.');
+      // Normalize error messages to Vietnamese
+      let errorMessage = err instanceof Error ? err.message : 'Đăng nhập thất bại. Vui lòng thử lại.';
+      
+      // Translate common error messages
+      if (errorMessage.toLowerCase().includes('invalid email or password') || 
+          errorMessage.toLowerCase().includes('invalid') && errorMessage.toLowerCase().includes('password')) {
+        errorMessage = 'Sai email hoặc mật khẩu. Vui lòng thử lại.';
+      } else if (errorMessage.toLowerCase().includes('email and password are required')) {
+        errorMessage = 'Vui lòng nhập email và mật khẩu.';
+      } else if (errorMessage.toLowerCase().includes('unauthorized')) {
+        errorMessage = 'Sai email hoặc mật khẩu. Vui lòng thử lại.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

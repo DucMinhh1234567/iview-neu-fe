@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import TeacherFooter from '@/components/TeacherFooter';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 
@@ -177,7 +177,7 @@ export default function ReviewStudentSessionPage() {
             <p className="text-[#5f6368]">Đang tải thông tin bài thi...</p>
           </div>
         </main>
-        <Footer />
+        <TeacherFooter />
       </div>
     );
   }
@@ -197,7 +197,7 @@ export default function ReviewStudentSessionPage() {
             ← Quay lại danh sách buổi thi
           </Link>
         </main>
-        <Footer />
+        <TeacherFooter />
       </div>
     );
   }
@@ -361,7 +361,7 @@ export default function ReviewStudentSessionPage() {
         )}
       </main>
 
-      <Footer />
+      <TeacherFooter />
     </div>
   );
 }

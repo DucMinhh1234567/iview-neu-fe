@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import TeacherFooter from '@/components/TeacherFooter';
 import Link from 'next/link';
+import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 
 interface Session {
@@ -63,8 +64,6 @@ export default function TeacherExamsPage() {
       reviewing_questions: { label: 'Đang xem xét câu hỏi', color: 'bg-amber-900 text-white' },
       generating_answers: { label: 'Đang tạo đáp án', color: 'bg-indigo-900 text-white' },
       reviewing_answers: { label: 'Đang xem xét đáp án', color: 'bg-amber-900 text-white' },
-      generating_script: { label: 'Đang tạo script', color: 'bg-indigo-900 text-white' },
-      reviewing_script: { label: 'Đang xem xét script', color: 'bg-amber-900 text-white' },
       ready: { label: 'Sẵn sàng', color: 'bg-emerald-900 text-white' },
       active: { label: 'Đang diễn ra', color: 'bg-emerald-900 text-white' },
       ended: { label: 'Đã kết thúc', color: 'bg-slate-800 text-white' },
@@ -124,17 +123,18 @@ export default function TeacherExamsPage() {
               />
             </div>
             <div className="md:w-48">
-              <select
+              <CustomSelect
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900"
-              >
-                <option value="all">Tất cả trạng thái</option>
-                <option value="created">Đã tạo</option>
-                <option value="ready">Sẵn sàng</option>
-                <option value="active">Đang diễn ra</option>
-                <option value="ended">Đã kết thúc</option>
-              </select>
+                onChange={setFilterStatus}
+                options={[
+                  { value: 'all', label: 'Tất cả trạng thái' },
+                  { value: 'created', label: 'Đã tạo' },
+                  { value: 'ready', label: 'Sẵn sàng' },
+                  { value: 'active', label: 'Đang diễn ra' },
+                  { value: 'ended', label: 'Đã kết thúc' }
+                ]}
+                placeholder="-- Chọn trạng thái --"
+              />
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function TeacherExamsPage() {
         )}
       </main>
 
-      <Footer />
+      <TeacherFooter />
     </div>
   );
 }

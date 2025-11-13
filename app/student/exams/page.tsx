@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import CustomSelect from '@/components/CustomSelect';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 
@@ -151,22 +152,26 @@ export default function ExamsPage() {
         )}
 
         <div className="bg-white border border-gray-200 shadow-sm p-3 flex gap-3 items-center mb-6 flex-wrap">
-          <select 
-            value={subjectFilter}
-            onChange={(e) => setSubjectFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#0065ca] max-w-[260px]"
-          >
-            <option value="all">Tất cả học phần</option>
-            {subjects.filter(s => s !== 'all').map(subject => (
-              <option key={subject} value={subject}>{subject}</option>
-            ))}
-          </select>
+          <div className="max-w-[260px]">
+            <CustomSelect
+              value={subjectFilter}
+              onChange={setSubjectFilter}
+              options={[
+                { value: 'all', label: 'Tất cả học phần' },
+                ...subjects.filter(s => s !== 'all').map(subject => ({
+                  value: subject,
+                  label: subject
+                }))
+              ]}
+              placeholder="-- Chọn học phần --"
+            />
+          </div>
           <input 
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Tìm theo tên kỳ thi..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#0065ca] max-w-[260px]"
+            className="flex-1 px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0065ca] max-w-[260px]"
           />
         </div>
 

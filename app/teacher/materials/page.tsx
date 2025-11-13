@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import TeacherFooter from '@/components/TeacherFooter';
 import { api } from '@/lib/api';
 import { getUserInfo } from '@/lib/auth';
 
@@ -327,7 +327,7 @@ export default function MaterialsPage() {
         </div>
       </main>
 
-      <Footer />
+      <TeacherFooter />
     </div>
   );
 }

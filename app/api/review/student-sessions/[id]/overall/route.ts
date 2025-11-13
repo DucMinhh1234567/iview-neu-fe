@@ -3,23 +3,33 @@ export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export async function GET(
+export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     // Handle params as Promise (Next.js 15+) or object
-    let lecturerId: string;
+    let studentSessionId: string;
     if (params && typeof params === 'object' && 'then' in params) {
       const resolvedParams = await params;
-      lecturerId = resolvedParams.id;
+      studentSessionId = resolvedParams.id;
     } else {
-      lecturerId = (params as { id: string }).id;
+      studentSessionId = (params as { id: string }).id;
     }
     
-    if (!lecturerId) {
+    if (!studentSessionId) {
       return Response.json(
-        { error: 'lecturer_id is required' },
+        { error: 'student_session_id is required' },
+        { status: 400 }
+      );
+    }
+    
+    const body = await request.json();
+    const { lecturer_feedback } = body;
+    
+    if (!lecturer_feedback) {
+      return Response.json(
+        { error: 'lecturer_feedback is required' },
         { status: 400 }
       );
     }
@@ -27,7 +37,7 @@ export async function GET(
     // Get auth token from header
     const authHeader = request.headers.get('Authorization');
     
-    const url = `${BACKEND_URL}/api/lecturers/${lecturerId}`;
+    const url = `${BACKEND_URL}/api/review/student-sessions/${studentSessionId}/overall`;
     
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -37,22 +47,20 @@ export async function GET(
       headers['Authorization'] = authHeader;
     }
     
-    console.log('Fetching lecturer dashboard from:', url);
-    
     const response = await fetch(url, {
-      method: 'GET',
+      method: 'PUT',
       headers,
+      body: JSON.stringify({ lecturer_feedback }),
       cache: 'no-store',
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Backend error:', response.status, errorText);
       let errorData;
       try {
         errorData = JSON.parse(errorText);
       } catch {
-        errorData = { error: errorText || 'Failed to get lecturer dashboard' };
+        errorData = { error: errorText || 'Failed to update overall feedback' };
       }
       return Response.json(
         errorData,
@@ -63,7 +71,7 @@ export async function GET(
     const data = await response.json();
     return Response.json(data);
   } catch (error) {
-    console.error('Get lecturer dashboard error:', error);
+    console.error('Update overall feedback error:', error);
     return Response.json(
       { error: error instanceof Error ? error.message : 'Failed to connect to backend server' },
       { status: 500 }

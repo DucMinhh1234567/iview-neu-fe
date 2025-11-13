@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
@@ -79,16 +80,19 @@ export default function HistoryPage() {
 
         <div className="mb-6 flex items-center gap-4">
           <label htmlFor="filter-type" className="font-medium">Lọc theo loại:</label>
-          <select 
-            id="filter-type"
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
-          >
-            <option value="all">Tất cả</option>
-            <option value="academic">🎓 Thi vấn đáp</option>
-            <option value="job">💼 Phỏng vấn việc làm</option>
-          </select>
+          <div className="w-64">
+            <CustomSelect
+              id="filter-type"
+              value={filterType}
+              onChange={setFilterType}
+              options={[
+                { value: 'all', label: 'Tất cả' },
+                { value: 'academic', label: 'Thi vấn đáp' },
+                { value: 'job', label: 'Phỏng vấn việc làm' }
+              ]}
+              placeholder="-- Chọn loại --"
+            />
+          </div>
         </div>
 
         {loading ? (

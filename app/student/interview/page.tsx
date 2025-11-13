@@ -110,28 +110,41 @@ export default function InterviewPage() {
   };
 
   const handleSubmit = async () => {
-    if (!studentSessionId || !currentQuestion || !currentAnswer.trim()) {
-      alert('Vui lòng nhập câu trả lời');
+    if (!studentSessionId) {
+      alert('Lỗi: Không tìm thấy session');
       return;
     }
 
+    // If completed, no need to submit current answer (all answers already submitted)
+    // If not completed, submit current answer first
+    if (!completed && currentQuestion && currentAnswer.trim()) {
+      setSubmitting(true);
+      try {
+        // Submit final answer if there's one
+        await api.submitAnswer(
+          studentSessionId,
+          currentQuestion.question_id,
+          currentAnswer
+        );
+      } catch (err) {
+        console.error('Failed to submit final answer:', err);
+        alert('Có lỗi xảy ra khi lưu câu trả lời cuối: ' + (err instanceof Error ? err.message : 'Unknown error'));
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    // End session and redirect to wait page (shows loading while AI grades)
     setSubmitting(true);
     try {
-      // Submit final answer
-      await api.submitAnswer(
-        studentSessionId,
-        currentQuestion.question_id,
-        currentAnswer
-      );
-
-      // End session
+      // End session (triggers AI grading)
       await api.endSession(studentSessionId);
 
-      // Redirect to results
-      router.push(`/student/results/${studentSessionId}`);
+      // Redirect to wait page (will show loading and redirect to results when done)
+      router.push(`/student/wait/${studentSessionId}`);
     } catch (err) {
-      console.error('Failed to submit interview:', err);
-      alert('Có lỗi xảy ra khi nộp bài: ' + (err instanceof Error ? err.message : 'Unknown error'));
+      console.error('Failed to end session:', err);
+      alert('Có lỗi xảy ra khi kết thúc buổi phỏng vấn: ' + (err instanceof Error ? err.message : 'Unknown error'));
       setSubmitting(false);
     }
   };

@@ -34,8 +34,8 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-[#004d80] text-white px-6 py-3 flex justify-between items-center shadow-md sticky top-0 z-50">
-      <Link href="/" className="flex items-center gap-2.5 px-3 py-2 transition-all hover:bg-white/10 hover:-translate-y-0.5">
+    <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md sticky top-0 z-50 h-14">
+      <Link href="/" className="flex items-center gap-2.5 px-3 h-full transition-all hover:bg-white/10">
         <img 
           src="/logos/logo-neu2.png" 
           alt="Logo NEU" 
@@ -46,13 +46,13 @@ export default function Navbar() {
         <span className="text-xl font-bold transition-all hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">iView NEU</span>
       </Link>
       
-      <ul className="flex items-center gap-4.5 list-none m-0 p-0">
+      <ul className="flex items-stretch list-none m-0 p-0 h-full">
         {userRole === 'teacher' || userRole === 'lecturer' ? (
           <>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/teacher/dashboard"
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/dashboard') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -60,10 +60,10 @@ export default function Navbar() {
                 {pathname.startsWith('/teacher/dashboard') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/teacher/materials" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/materials') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -71,10 +71,10 @@ export default function Navbar() {
                 {pathname.startsWith('/teacher/materials') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/teacher/create-exam" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/create-exam') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -82,10 +82,10 @@ export default function Navbar() {
                 {pathname.startsWith('/teacher/create-exam') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/teacher/exams" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/exams') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -93,10 +93,10 @@ export default function Navbar() {
                 {pathname.startsWith('/teacher/exams') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/teacher/guide" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/guide') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -107,10 +107,10 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href={isLoggedIn && userRole === 'student' ? '/student/home' : '/'}
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   (isActive('/') || isActive('/student/home')) ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -118,10 +118,10 @@ export default function Navbar() {
                 {(isActive('/') || isActive('/student/home')) && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/student/create-session" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/create-session') || pathname.startsWith('/student/upload-cv') || pathname.startsWith('/student/create-exam-session') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -129,10 +129,10 @@ export default function Navbar() {
                 {(pathname.startsWith('/student/create-session') || pathname.startsWith('/student/upload-cv') || pathname.startsWith('/student/create-exam-session')) && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/student/history" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/history') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -140,10 +140,10 @@ export default function Navbar() {
                 {pathname.startsWith('/student/history') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/student/exams" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/exams') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -151,10 +151,10 @@ export default function Navbar() {
                 {pathname.startsWith('/student/exams') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
               </Link>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full">
               <Link 
                 href="/student/guide" 
-                className={`px-4 py-2 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center ${
+                className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/guide') ? 'bg-white/10' : ''
                 } hover:bg-white/10`}
               >
@@ -166,11 +166,11 @@ export default function Navbar() {
         )}
         {isLoggedIn ? (
           <>
-            <li className="flex items-center">
+            <li className="flex items-stretch h-full ml-4">
               {userRole === 'student' ? (
                 <Link 
                   href="/student/dashboard"
-                  className={`relative px-4 py-2 rounded-lg transition-all duration-300 flex items-center gap-2 group ${
+                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-2 group h-full ${
                     pathname.startsWith('/student/dashboard') 
                       ? 'bg-white/20 shadow-lg' 
                       : 'hover:bg-white/10 hover:shadow-md'
@@ -190,7 +190,7 @@ export default function Navbar() {
                   )}
                 </Link>
               ) : (
-                <div className="flex items-center gap-2 px-4 py-2">
+                <div className="flex items-center gap-2 px-4 py-3 h-full">
                   <span className="text-sm">
                     {userName || 'Giảng viên'}
                   </span>
@@ -198,20 +198,20 @@ export default function Navbar() {
                 </div>
               )}
             </li>
-            <li>
+            <li className="flex items-stretch h-full ml-4">
               <button
                 onClick={handleLogout}
-                className="bg-red-600 text-white font-semibold px-5 py-2 hover:bg-red-700 focus:outline-none focus:shadow-[0_0_0_2px_rgba(220,38,38,0.25)] transition-colors"
+                className="bg-red-600 text-white font-semibold px-5 py-3 hover:bg-red-700 focus:outline-none focus:shadow-[0_0_0_2px_rgba(220,38,38,0.25)] transition-colors h-full"
               >
                 Đăng Xuất
               </button>
             </li>
           </>
         ) : (
-          <li>
+          <li className="flex items-stretch h-full ml-4">
             <Link 
               href="/select-role" 
-              className="bg-white text-[#0065ca] font-semibold px-5 py-2 hover:bg-[#f1f5ff] focus:outline-none focus:shadow-[0_0_0_2px_rgba(0,101,202,0.25)]"
+              className="bg-white text-[#0065ca] font-semibold px-5 py-3 hover:bg-[#f1f5ff] focus:outline-none focus:shadow-[0_0_0_2px_rgba(0,101,202,0.25)] h-full flex items-center"
             >
               Đăng Nhập
             </Link>

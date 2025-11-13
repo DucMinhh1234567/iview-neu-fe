@@ -15,17 +15,27 @@ export default function ResultDetailPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const load = async () => {
+    const studentSessionId = parseInt(filename);
+    if (isNaN(studentSessionId)) {
+      setError('Invalid session ID');
+      setLoading(false);
+      return;
+    }
+
+    let intervalId: NodeJS.Timeout | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
+
+    const loadData = async (): Promise<boolean> => {
       try {
-        // filename is now student_session_id
-        const studentSessionId = parseInt(filename);
-        if (isNaN(studentSessionId)) {
-          setError('Invalid session ID');
-          setLoading(false);
-          return;
+        const d = await api.getStudentSession(studentSessionId);
+        
+        // Check if grading is complete (has score_total)
+        if (d.score_total === null || d.score_total === undefined) {
+          // Still loading - wait page should handle this, but if user navigates directly, show loading
+          setLoading(true);
+          return false; // Not complete yet
         }
         
-        const d = await api.getStudentSession(studentSessionId);
         // Backend returns: { student_session_id, session_id, session_name, session_type, score_total, ai_overall_feedback, answers: [...] }
         // Transform to match expected format
         const payload: any = {
@@ -52,13 +62,48 @@ export default function ResultDetailPage() {
           answers: d.answers || []
         };
         setData(payload);
+        setLoading(false);
+        return true; // Complete
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to load');
-      } finally {
         setLoading(false);
+        return false;
       }
     };
-    load();
+
+    // Initial load
+    loadData().then((isComplete) => {
+      if (!isComplete) {
+        // If not complete, poll every 3 seconds until grading is complete
+        intervalId = setInterval(async () => {
+          const result = await loadData();
+          if (result && intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+              timeoutId = null;
+            }
+          }
+        }, 3000);
+        
+        // Cleanup after 5 minutes
+        timeoutId = setTimeout(() => {
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
+          setError('Chấm điểm mất quá nhiều thời gian. Vui lòng thử lại sau.');
+          setLoading(false);
+        }, 5 * 60 * 1000);
+      }
+    });
+
+    // Cleanup on unmount
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [filename]);
 
   const summary = data?.summary || (typeof data?.summary === 'string' ? data.summary : '');
@@ -76,12 +121,17 @@ export default function ResultDetailPage() {
         )}
 
         {loading ? (
-          <div className="flex items-center gap-3">
-            <div className="w-6 h-6 border-4 border-[#0065ca] border-t-transparent rounded-full animate-spin"></div>
-            <span>Đang tải kết quả...</span>
+          <div className="bg-white shadow-sm rounded-lg p-8 text-center">
+            <div className="mx-auto w-16 h-16 border-4 border-[#0065ca] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <h2 className="text-xl font-semibold mb-2 text-gray-800">Đang chấm điểm...</h2>
+            <p className="text-gray-600 mb-2">AI đang chấm điểm các câu trả lời của bạn</p>
+            <p className="text-sm text-gray-500">Vui lòng đợi trong giây lát...</p>
           </div>
         ) : error ? (
-          <div className="text-red-600">{error}</div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <div className="text-red-600 font-semibold mb-2">Lỗi</div>
+            <div className="text-red-700">{error}</div>
+          </div>
         ) : (
           <div className="space-y-8">
             {/* Summary */}

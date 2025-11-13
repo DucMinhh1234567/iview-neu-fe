@@ -14,53 +14,107 @@ export default function WaitPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Backend processes answers synchronously, so we can check status and redirect immediately
-    const checkStatus = async () => {
-      try {
-        // log is now student_session_id
-        const studentSessionId = parseInt(log);
-        if (isNaN(studentSessionId)) {
-          setError('Invalid session ID');
-          setLoading(false);
-          return;
-        }
+    // Polling to check if AI grading is complete
+    const studentSessionId = parseInt(log);
+    if (isNaN(studentSessionId)) {
+      setError('Invalid session ID');
+      setLoading(false);
+      return;
+    }
 
-        // Check if session is completed
+    let intervalId: NodeJS.Timeout | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
+    let isMounted = true;
+
+    const checkStatus = async (): Promise<boolean> => {
+      try {
+        // Check if session is completed (has score_total)
         const session = await api.getStudentSession(studentSessionId);
         
-        // If session has score_total, it's completed, redirect to results
+        // If session has score_total, AI grading is complete, redirect to results
         if (session.score_total !== null && session.score_total !== undefined) {
-          router.push(`/student/results/${studentSessionId}`);
-          return;
+          if (isMounted) {
+            if (intervalId) clearInterval(intervalId);
+            if (timeoutId) clearTimeout(timeoutId);
+            router.push(`/student/results/${studentSessionId}`);
+          }
+          return true; // Stop polling
         }
 
-        // Otherwise, redirect to results anyway (backend doesn't have async processing)
-        // The results page will show "no results yet" or handle it appropriately
-        router.push(`/student/results/${studentSessionId}`);
+        // If not completed yet, continue polling
+        return false;
       } catch (e) {
         console.error('Error checking session status:', e);
-        setError(e instanceof Error ? e.message : 'Lỗi kết nối');
-        setLoading(false);
-        // Still redirect to results after a short delay
-        setTimeout(() => {
-          router.push(`/student/results/${log}`);
-        }, 2000);
+        if (isMounted) {
+          setError(e instanceof Error ? e.message : 'Lỗi kết nối');
+        }
+        // Don't stop polling on error, might be temporary
+        return false;
       }
     };
 
-    checkStatus();
+    // Initial check
+    checkStatus().then((isComplete) => {
+      if (!isComplete && isMounted) {
+        // If not completed, start polling every 3 seconds
+        intervalId = setInterval(async () => {
+          if (!isMounted) {
+            if (intervalId) clearInterval(intervalId);
+            return;
+          }
+          const result = await checkStatus();
+          if (result && intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
+        }, 3000); // Poll every 3 seconds
+
+        // Cleanup interval after 5 minutes (timeout)
+        timeoutId = setTimeout(() => {
+          if (!isMounted) return;
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
+          setError('Chấm điểm mất quá nhiều thời gian. Vui lòng thử lại sau.');
+          setLoading(false);
+          // Redirect to results anyway after timeout
+          setTimeout(() => {
+            if (isMounted) {
+              router.push(`/student/results/${log}`);
+            }
+          }, 2000);
+        }, 5 * 60 * 1000); // 5 minutes timeout
+      }
+    });
+
+    // Cleanup on unmount
+    return () => {
+      isMounted = false;
+      if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [log, router]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-xl mx-auto text-center py-24 px-5">
-        <h1 className="text-2xl font-semibold mb-3">Đang xử lý kết quả...</h1>
-        <div className="mx-auto w-16 h-16 border-4 border-[#0065ca] border-t-transparent rounded-full animate-spin mb-4"></div>
-        {error && <p className="text-red-600 mt-4">{error}</p>}
-        {!error && (
-          <p className="text-gray-500 mt-6">Đang chuyển đến trang kết quả...</p>
-        )}
+        <div className="bg-white shadow-sm rounded-lg p-8">
+          <h1 className="text-2xl font-semibold mb-4 text-gray-800">Đang chấm điểm...</h1>
+          <div className="mx-auto w-20 h-20 border-4 border-[#0065ca] border-t-transparent rounded-full animate-spin mb-6"></div>
+          {error ? (
+            <div className="mt-4">
+              <p className="text-red-600 mb-4">{error}</p>
+              <p className="text-sm text-gray-500">Đang chuyển đến trang kết quả...</p>
+            </div>
+          ) : (
+            <div className="mt-4">
+              <p className="text-gray-600 mb-2">AI đang chấm điểm các câu trả lời của bạn</p>
+              <p className="text-sm text-gray-500">Vui lòng đợi trong giây lát...</p>
+            </div>
+          )}
+        </div>
       </main>
       <Footer />
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import TeacherFooter from '@/components/TeacherFooter';
 import Link from 'next/link';
 
 export default function TeacherGuidePage() {
@@ -231,7 +231,7 @@ export default function TeacherGuidePage() {
         </div>
       </main>
 
-      <Footer />
+      <TeacherFooter />
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import TeacherFooter from '@/components/TeacherFooter';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 import { getUserInfo } from '@/lib/auth';
@@ -434,7 +434,7 @@ export default function CreateExamPage() {
         </form>
       </main>
 
-      <Footer />
+      <TeacherFooter />
     </div>
   );
 }

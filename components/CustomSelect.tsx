@@ -66,7 +66,7 @@ export default function CustomSelect({
         type="button"
         id={id}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-4 py-3 border border-gray-300 bg-white text-[#202124] text-sm font-medium transition-all duration-200 hover:border-[#0065ca] hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0065ca] focus:border-[#0065ca] cursor-pointer text-left flex items-center justify-between ${className}`}
+        className={`w-full px-4 py-2.5 border border-gray-300 bg-white text-[#202124] text-sm font-medium transition-all duration-200 hover:border-[#0065ca] hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0065ca] focus:border-[#0065ca] cursor-pointer text-left flex items-center justify-between ${className}`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
-import { setAuthToken, setUserInfo, setupAuthCleanup } from '@/lib/auth';
+import { setAuthToken, setRefreshToken, setUserInfo, setupAuthCleanup } from '@/lib/auth';
 
 export default function StudentLoginPage() {
   const router = useRouter();
@@ -30,14 +30,27 @@ export default function StudentLoginPage() {
       if (response.token) {
         setAuthToken(response.token);
         if (response.refresh_token) {
-          sessionStorage.setItem('refreshToken', response.refresh_token);
+          setRefreshToken(response.refresh_token);
         }
       }
       
       if (response.user) {
+        const userRole = response.user.role?.toLowerCase() || 'student';
+        
+        // Check if user role matches the login page
+        if (userRole !== 'student' && userRole !== 'lecturer') {
+          // Invalid role
+          throw new Error('Sai email hoặc mật khẩu.');
+        }
+        
+        if (userRole === 'lecturer' || userRole === 'teacher') {
+          // Teacher trying to login as student
+          throw new Error('Sai email hoặc mật khẩu.');
+        }
+        
         setUserInfo({
           isLoggedIn: true,
-          userRole: response.user.role?.toLowerCase() || 'student',
+          userRole: userRole,
           userEmail: response.user.email || email,
           userName: response.user.full_name || email.split('@')[0],
           userId: response.user.user_id?.toString() || '',
@@ -48,7 +61,20 @@ export default function StudentLoginPage() {
       router.push('/student/home');
     } catch (err) {
       console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'Đăng nhập thất bại. Vui lòng thử lại.');
+      // Normalize error messages to Vietnamese
+      let errorMessage = err instanceof Error ? err.message : 'Đăng nhập thất bại. Vui lòng thử lại.';
+      
+      // Translate common error messages
+      if (errorMessage.toLowerCase().includes('invalid email or password') || 
+          errorMessage.toLowerCase().includes('invalid') && errorMessage.toLowerCase().includes('password')) {
+        errorMessage = 'Sai email hoặc mật khẩu. Vui lòng thử lại.';
+      } else if (errorMessage.toLowerCase().includes('email and password are required')) {
+        errorMessage = 'Vui lòng nhập email và mật khẩu.';
+      } else if (errorMessage.toLowerCase().includes('unauthorized')) {
+        errorMessage = 'Sai email hoặc mật khẩu. Vui lòng thử lại.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

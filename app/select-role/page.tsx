@@ -10,7 +10,7 @@ export default function SelectRolePage() {
       <div className="max-w-5xl w-full">
         {/* Compact Header */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-light mb-3 tracking-tight text-[#001a33]" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h1 className="text-4xl md:text-5xl font-light mb-3 tracking-tight text-[#001a33]">
             Chào mừng đến với iView NEU
           </h1>
           <p className="text-lg text-[#5f6368] font-light">
@@ -27,7 +27,7 @@ export default function SelectRolePage() {
             <div className="text-center flex-grow">
               <div className="w-12 h-0.5 bg-[#0065ca] mx-auto mb-6 group-hover:w-16 transition-all"></div>
               
-              <h2 className="text-2xl font-semibold mb-4 text-[#001a33]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h2 className="text-2xl font-semibold mb-4 text-[#001a33]">
                 Sinh Viên
               </h2>
               
@@ -69,7 +69,7 @@ export default function SelectRolePage() {
             <div className="text-center flex-grow">
               <div className="w-12 h-0.5 bg-[#0065ca] mx-auto mb-6 group-hover:w-16 transition-all"></div>
               
-              <h2 className="text-2xl font-semibold mb-4 text-[#001a33]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h2 className="text-2xl font-semibold mb-4 text-[#001a33]">
                 Giảng Viên
               </h2>
               
