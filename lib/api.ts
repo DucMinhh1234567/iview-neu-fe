@@ -236,14 +236,7 @@ export const api = {
   },
 
   // Legacy methods (for backward compatibility)
-  async getQuestions(filename: string) {
-    // filename is now student_session_id
-    const studentSessionId = parseInt(filename);
-    if (isNaN(studentSessionId)) {
-      throw new Error('Invalid student_session_id');
-    }
-    return api.getNextQuestion(studentSessionId);
-  },
+  // Note: getQuestions legacy method removed - use getNextQuestion instead
 
   async getHistory() {
     const response = await fetch(`${BASE}/api/history`, {
