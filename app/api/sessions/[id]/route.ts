@@ -5,14 +5,11 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function GET(
   request: Request,
-  ctx: { params: Promise<{ id: string }> | { id: string } }
+  ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Handle params as Promise (Next.js 15+) or object
-    const p: any = (typeof (ctx as any).params?.then === 'function') 
-      ? await (ctx as any).params 
-      : (ctx as any).params;
-    const sessionId = (p.id as string);
+    const resolvedParams = await ctx.params;
+    const sessionId = resolvedParams.id;
     
     if (!sessionId) {
       return Response.json(
