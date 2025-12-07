@@ -67,6 +67,7 @@ export default function HistoryPage() {
   const topSummary = items.find(it => (it.status === 'done') && (it.summary && it.summary.overall_feedback));
   const feedback = topSummary?.summary?.overall_feedback as (undefined | string | {
     overall_score?: number;
+    overall_feedback?: string;
     strengths?: string;
     weaknesses?: string;
     hiring_recommendation?: string;

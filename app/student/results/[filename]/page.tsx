@@ -63,7 +63,7 @@ export default function ResultDetailPage() {
 
   const summary = data?.summary || (typeof data?.summary === 'string' ? data.summary : '');
   const details = data?.details || [];
-  const feedback = typeof summary === 'string' ? summary : (summary?.overall_feedback as (undefined | { overall_score?: number; strengths?: string; weaknesses?: string; hiring_recommendation?: string }));
+  const feedback = typeof summary === 'string' ? summary : (summary?.overall_feedback as (undefined | { overall_score?: number; overall_feedback?: string; strengths?: string; weaknesses?: string; hiring_recommendation?: string }));
 
   return (
     <div className="min-h-screen">
