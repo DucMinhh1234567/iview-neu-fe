@@ -7,7 +7,19 @@ import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
 export default function HistoryPage() {
-  const [items, setItems] = useState<Array<{ log_file: string; result_file?: string | null; status: 'pending' | 'done'; summary?: any }>>([]);
+  const [items, setItems] = useState<Array<{ 
+    id?: string;
+    log_file: string; 
+    result_file?: string | null; 
+    status: 'pending' | 'done'; 
+    summary?: any;
+    session_type?: string;
+    candidate_name?: string;
+    session_name?: string;
+    course_name?: string;
+    score_total?: number | null;
+    created_at?: string;
+  }>>([]);
   const [filterType, setFilterType] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
