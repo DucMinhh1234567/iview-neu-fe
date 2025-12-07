@@ -142,8 +142,10 @@ export default function CreateExamPage() {
 
       // Format datetime for backend (ISO format)
       // Convert from datetime-local format (YYYY-MM-DDTHH:mm) to ISO format
-      const formatDateTime = (dateTimeStr: string) => {
-        if (!dateTimeStr) return null;
+      const formatDateTime = (dateTimeStr: string): string => {
+        if (!dateTimeStr) {
+          throw new Error('Thời gian không được để trống');
+        }
         // datetime-local returns format: YYYY-MM-DDTHH:mm
         // We need to convert to ISO format: YYYY-MM-DDTHH:mm:ss
         // Backend expects ISO format, so we'll add seconds if not present
