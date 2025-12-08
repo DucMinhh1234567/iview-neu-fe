@@ -5,13 +5,10 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function POST(
   request: Request,
-  ctx: { params: Promise<{ id: string }> | { id: string } }
+  ctx: { params: { id: string } }
 ) {
   try {
-    const p: any = (typeof (ctx as any).params?.then === 'function') 
-      ? await (ctx as any).params 
-      : (ctx as any).params;
-    const studentSessionId = (p.id as string);
+    const studentSessionId = ctx.params.id;
     
     if (!studentSessionId) {
       return Response.json(
