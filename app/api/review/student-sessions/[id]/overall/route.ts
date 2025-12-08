@@ -1,15 +1,14 @@
-import type { NextRequest } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function PUT(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const studentSessionId = context.params.id;
+    const studentSessionId = params.id;
     
     if (!studentSessionId) {
       return Response.json(

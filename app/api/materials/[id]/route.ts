@@ -1,15 +1,14 @@
-import type { NextRequest } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function DELETE(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const materialId = context.params.id;
+    const materialId = params.id;
     
     if (!materialId) {
       return Response.json(

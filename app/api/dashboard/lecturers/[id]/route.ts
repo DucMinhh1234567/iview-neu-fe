@@ -1,15 +1,14 @@
-import type { NextRequest } from 'next/server';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function GET(
-  request: NextRequest,
-  context: { params: Record<string, string> }
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const lecturerId = context.params.id;
+    const lecturerId = params.id;
     
     if (!lecturerId) {
       return Response.json(
