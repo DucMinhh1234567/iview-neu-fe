@@ -1,21 +1,16 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://101.96.66.223:8008';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Handle params as Promise (Next.js 15+) or object
-    let materialId: string;
-    if (params && typeof params === 'object' && 'then' in params) {
-      const resolvedParams = await params;
-      materialId = resolvedParams.id;
-    } else {
-      materialId = (params as { id: string }).id;
-    }
+    // Handle params as Promise (Next.js 15+)
+    const resolvedParams = await params;
+    const materialId = resolvedParams.id;
     
     if (!materialId) {
       return Response.json(
