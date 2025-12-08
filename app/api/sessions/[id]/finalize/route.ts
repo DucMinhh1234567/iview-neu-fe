@@ -6,10 +6,10 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function POST(
   request: NextRequest,
-  ctx: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const sessionId = ctx.params.id;
+    const sessionId = context.params.id;
     
     if (!sessionId) {
       return Response.json(

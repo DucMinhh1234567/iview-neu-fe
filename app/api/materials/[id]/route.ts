@@ -6,10 +6,10 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const materialId = params.id;
+    const materialId = context.params.id;
     
     if (!materialId) {
       return Response.json(

@@ -6,10 +6,10 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function PUT(
   request: NextRequest,
-  ctx: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const questionId = ctx.params.id;
+    const questionId = context.params.id;
     
     if (!questionId) {
       return Response.json(
@@ -65,10 +65,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  ctx: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const questionId = ctx.params.id;
+    const questionId = context.params.id;
     
     if (!questionId) {
       return Response.json(
