@@ -108,7 +108,7 @@ export default function ResultDetailPage() {
 
   const summary = data?.summary || (typeof data?.summary === 'string' ? data.summary : '');
   const details = data?.details || [];
-  const feedback = typeof summary === 'string' ? summary : (summary?.overall_feedback as (undefined | { overall_score?: number; strengths?: string; weaknesses?: string; hiring_recommendation?: string }));
+  const feedback: string | { overall_score?: number; strengths?: string; weaknesses?: string; hiring_recommendation?: string; overall_feedback?: string } | undefined = typeof summary === 'string' ? summary : (summary as any);
 
   return (
     <div className="min-h-screen">
@@ -167,7 +167,13 @@ export default function ResultDetailPage() {
                 </div>
                 <div>
                   <div className="font-semibold mb-2">Nhận xét</div>
-                  <p className="text-gray-700 whitespace-pre-wrap">{typeof feedback === 'string' ? feedback : (feedback.overall_feedback || feedback.strengths || '-')}</p>
+                  <p className="text-gray-700 whitespace-pre-wrap">
+                    {typeof feedback === 'string' 
+                      ? feedback 
+                      : (feedback && typeof feedback === 'object' 
+                          ? (feedback.overall_feedback || feedback.strengths || '-') 
+                          : '-')}
+                  </p>
                 </div>
               </section>
             )}
