@@ -3,11 +3,6 @@ export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-// Log backend URL for debugging (only in development)
-if (process.env.NODE_ENV !== 'production') {
-  console.log('Submit interview - Backend URL:', BACKEND_URL);
-}
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -45,19 +40,8 @@ export async function POST(request: Request) {
         
         if (!submitResponse.ok) {
           const errorText = await submitResponse.text();
-          let errorData;
-          try {
-            errorData = JSON.parse(errorText);
-          } catch {
-            // If backend returns HTML error page, extract meaningful message
-            errorData = { 
-              error: errorText.includes('Internal Server Error') 
-                ? 'Lỗi máy chủ nội bộ khi nộp câu trả lời. Vui lòng thử lại.'
-                : errorText || 'Failed to submit answer'
-            };
-          }
           return Response.json(
-            errorData,
+            { error: `Failed to submit answer: ${errorText}` },
             { status: submitResponse.status }
           );
         }
@@ -72,33 +56,13 @@ export async function POST(request: Request) {
     
     if (!endResponse.ok) {
       const errorText = await endResponse.text();
-      let errorData;
-      try {
-        errorData = JSON.parse(errorText);
-      } catch {
-        // If backend returns HTML error page, extract meaningful message
-        errorData = { 
-          error: errorText.includes('Internal Server Error') 
-            ? 'Lỗi máy chủ nội bộ. Vui lòng thử lại sau hoặc liên hệ quản trị viên.'
-            : errorText || 'Failed to end session'
-        };
-      }
       return Response.json(
-        errorData,
+        { error: `Failed to end session: ${errorText}` },
         { status: endResponse.status }
       );
     }
     
-    let endData;
-    try {
-      endData = await endResponse.json();
-    } catch (error) {
-      const errorText = await endResponse.text();
-      return Response.json(
-        { error: `Invalid response from backend: ${errorText.substring(0, 200)}` },
-        { status: 500 }
-      );
-    }
+    const endData = await endResponse.json();
     
     // Return format compatible with old flow
     return Response.json({
@@ -110,21 +74,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Submit interview error:', error);
-    console.error('Backend URL:', BACKEND_URL);
-    
-    let errorMessage = 'Failed to connect to backend server';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-      // Check for specific error types
-      if (error.message.includes('fetch failed') || error.message.includes('ECONNREFUSED')) {
-        errorMessage = 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc liên hệ quản trị viên.';
-      } else if (error.message.includes('timeout')) {
-        errorMessage = 'Yêu cầu quá thời gian chờ. Vui lòng thử lại.';
-      }
-    }
-    
     return Response.json(
-      { error: errorMessage },
+      { error: error instanceof Error ? error.message : 'Failed to connect to backend server' },
       { status: 500 }
     );
   }
