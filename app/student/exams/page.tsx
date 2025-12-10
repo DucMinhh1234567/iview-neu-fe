@@ -189,7 +189,7 @@ export default function ExamsPage() {
         ) : (
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5">
             {filteredExams.map((exam) => (
-              <article key={exam.session_id} className="bg-white border border-gray-200 shadow-sm p-4.5 transition-all hover:-translate-y-1 hover:shadow-md hover:border-[#0065ca] rounded-lg">
+              <article key={exam.session_id} className="bg-white border border-gray-200 shadow-sm p-4.5 transition-all hover:-translate-y-1 hover:shadow-md hover:border-[#0065ca] rounded-none">
                 <div className="text-lg font-semibold text-[#202124] mb-1.5">{exam.session_name}</div>
                 {exam.course_name && (
                   <div className="text-sm text-[#0065ca] mb-2 font-medium">{exam.course_name}</div>
@@ -211,7 +211,7 @@ export default function ExamsPage() {
                   </span>
                   <button 
                     onClick={() => handleEnterExam(exam)}
-                    className="bg-[#0065ca] text-white px-3 py-2 rounded hover:bg-[#004a95] transition-colors text-sm font-medium"
+                    className="bg-[#0065ca] text-white px-3 py-2 rounded-none hover:bg-[#004a95] transition-colors text-sm font-medium"
                   >
                     Vào thi
                   </button>
@@ -228,7 +228,7 @@ export default function ExamsPage() {
       {selectedExam && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={handleClosePasswordModal} />
-          <div className="relative bg-white rounded-lg w-[92%] max-w-md p-6 shadow-xl">
+          <div className="relative bg-white rounded-none w-[92%] max-w-md p-6 shadow-xl">
             <h3 className="text-lg font-semibold mb-2">Nhập mật khẩu kỳ thi</h3>
             <p className="text-gray-700 mb-4">
               Kỳ thi: <span className="font-semibold">{selectedExam.session_name}</span>
@@ -271,7 +271,7 @@ export default function ExamsPage() {
               <button 
                 onClick={handlePasswordSubmit}
                 disabled={joining}
-                className="px-4 py-2 bg-[#0065ca] text-white rounded hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-[#0065ca] text-white rounded-none hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {joining ? 'Đang tham gia...' : 'Vào thi'}
               </button>

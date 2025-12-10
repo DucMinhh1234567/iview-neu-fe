@@ -21,6 +21,7 @@ interface Material {
 export default function MaterialsPage() {
   const router = useRouter();
   const uploadFormRef = useRef<HTMLDivElement>(null);
+  const [showForm, setShowForm] = useState(false);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState<File | null>(null);
@@ -49,9 +50,11 @@ export default function MaterialsPage() {
     }
   };
 
-  const scrollToUploadForm = () => {
-    uploadFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  useEffect(() => {
+    if (showForm) {
+      uploadFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [showForm]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,15 +153,16 @@ export default function MaterialsPage() {
             <p className="text-[#5f6368]">Quản lý và upload tài liệu PDF cho sinh viên sử dụng</p>
           </div>
           <button
-            onClick={scrollToUploadForm}
+            onClick={() => setShowForm((s) => !s)}
             className="px-6 py-2.5 bg-[#0065ca] text-white font-semibold hover:bg-[#005bb5] transition-colors"
           >
-            Upload Tài Liệu
+            {showForm ? 'Đóng' : 'Thêm tài liệu'}
           </button>
         </div>
 
-        {/* Upload Form */}
-        <div ref={uploadFormRef} className="bg-white shadow-sm p-8 mb-8">
+        {/* Upload Form (hidden until toggled) */}
+        {showForm && (
+          <div ref={uploadFormRef} className="bg-white shadow-sm p-8 mb-8">
           <h2 className="text-xl font-semibold text-[#202124] mb-6">Upload Tài Liệu Mới</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -268,58 +272,55 @@ export default function MaterialsPage() {
               </button>
             </div>
           </form>
-        </div>
+          </div>
+        )}
 
-        {/* List of materials */}
-        <div className="bg-white shadow-sm p-8">
+        {/* List of materials (cards) */}
+        <div className="">
           <h2 className="text-xl font-semibold text-[#202124] mb-6">Tài Liệu Đã Upload</h2>
-          
+
           {loading ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 bg-white shadow-sm p-8">
               <div className="w-12 h-12 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
               <p className="text-[#5f6368]">Đang tải dữ liệu...</p>
             </div>
           ) : filteredMaterials.length === 0 ? (
-            <p className="text-[#5f6368] text-center py-8">Chưa có tài liệu nào được upload</p>
+            <div className="bg-white shadow-sm p-8">
+              <p className="text-[#5f6368] text-center py-8">Chưa có tài liệu nào được upload</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMaterials.map((material) => (
-                <div
-                  key={material.material_id}
-                  className="flex justify-between items-center p-4 border border-gray-200 hover:border-[#0065ca] transition-colors"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-[#202124]">{material.title}</h3>
-                      <span className={`px-2 py-1 text-xs font-medium ${
-                        material.is_public 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {material.is_public ? 'Public' : 'Private'}
-                      </span>
+                <div key={material.material_id} className="bg-white border border-gray-200 rounded-none p-4 shadow-sm hover:shadow-md transition">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-semibold text-[#202124]">{material.title}</h3>
+                      </div>
+                      {material.description && (
+                        <p className="text-sm text-[#5f6368] mb-3">{material.description}</p>
+                      )}
+                      <p className="text-xs text-[#5f6368]">Upload ngày: {formatDate(material.created_at)}{material.num_chunks && ` • ${material.num_chunks} chunks`}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center gap-3">
+                    {material.file_url ? (
+                      <span className="text-sm text-[#5f6368]">Đã upload file</span>
+                    ) : (
+                      <span className="text-sm text-[#888]">Chưa có file</span>
+                    )}
+
+                    <div className="ml-auto flex items-center gap-2">
+                      <span className={`px-2 py-1 text-xs font-medium ${material.is_public ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{material.is_public ? 'Public' : 'Private'}</span>
+                      {isMyMaterial(material) && <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800">Của tôi</span>}
                       {isMyMaterial(material) && (
-                        <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800">
-                          Của tôi
-                        </span>
+                        <button onClick={() => handleDelete(material.material_id)} className="px-3 py-1 text-red-600 border border-red-300 hover:bg-red-50 transition-colors text-sm rounded-none">
+                          Xóa
+                        </button>
                       )}
                     </div>
-                    {material.description && (
-                      <p className="text-sm text-[#5f6368] mb-1">{material.description}</p>
-                    )}
-                    <p className="text-sm text-[#5f6368]">
-                      Upload ngày: {formatDate(material.created_at)}
-                      {material.num_chunks && ` • ${material.num_chunks} chunks`}
-                    </p>
                   </div>
-                  {isMyMaterial(material) && (
-                    <button
-                      onClick={() => handleDelete(material.material_id)}
-                      className="px-4 py-2 text-red-600 border border-red-300 hover:bg-red-50 transition-colors text-sm"
-                    >
-                      Xóa
-                    </button>
-                  )}
                 </div>
               ))}
             </div>
