@@ -11,7 +11,7 @@ interface Question {
   question: string;
   question_number?: number;
   total_questions?: number;
-  difficulty?: string;
+  question_type?: string;
 }
 
 function InterviewContent() {
@@ -65,7 +65,7 @@ function InterviewContent() {
         question: result.question || result.text || '',
         question_number: result.question_number,
         total_questions: result.total_questions,
-        difficulty: result.difficulty
+        question_type: result.question_type
       };
 
       setCurrentQuestion(question);
@@ -206,9 +206,9 @@ function InterviewContent() {
             <span className="text-sm text-gray-600">
               Câu hỏi {questionNumber} / {totalQuestions}
             </span>
-            {currentQuestion.difficulty && (
+            {currentQuestion.question_type && (
               <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                Độ khó: {currentQuestion.difficulty}
+                Loại câu hỏi: {currentQuestion.question_type}
               </span>
             )}
           </div>

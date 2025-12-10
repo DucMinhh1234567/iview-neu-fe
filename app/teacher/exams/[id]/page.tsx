@@ -42,7 +42,7 @@ interface Question {
   session_id: number;
   content: string;
   keywords?: string;
-  difficulty?: string;
+  question_type?: string;
   status: string;
   reference_answer?: string;
   created_at?: string;
@@ -55,12 +55,12 @@ function QuestionEditForm({
   onCancel 
 }: { 
   question: Question; 
-  onSave: (data: { content?: string; keywords?: string; difficulty?: string }) => void; 
+  onSave: (data: { content?: string; keywords?: string; question_type?: string }) => void; 
   onCancel: () => void;
 }) {
   const [content, setContent] = useState(question.content);
   const [keywords, setKeywords] = useState(question.keywords || '');
-  const [difficulty, setDifficulty] = useState(question.difficulty || 'MEDIUM');
+  const [questionType, setQuestionType] = useState(question.question_type || '');
 
   return (
     <div className="space-y-4">
@@ -83,21 +83,18 @@ function QuestionEditForm({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-[#5f6368] mb-2">Độ khó</label>
-        <CustomSelect
-          value={difficulty}
-          onChange={setDifficulty}
-          options={[
-            { value: 'EASY', label: 'EASY' },
-            { value: 'MEDIUM', label: 'MEDIUM' },
-            { value: 'HARD', label: 'HARD' }
-          ]}
-          placeholder="-- Chọn độ khó --"
+        <label className="block text-sm font-medium text-[#5f6368] mb-2">Loại câu hỏi / Bloom level</label>
+        <input
+          type="text"
+          value={questionType}
+          onChange={(e) => setQuestionType(e.target.value)}
+          placeholder="VD: REMEMBER, APPLY, behavioral, technical..."
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
         />
       </div>
       <div className="flex gap-2">
         <button
-          onClick={() => onSave({ content, keywords, difficulty })}
+          onClick={() => onSave({ content, keywords, question_type: questionType })}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
         >
           Lưu
@@ -321,7 +318,7 @@ export default function ExamDetailPage() {
 
 
 
-  const handleUpdateQuestion = async (questionId: number, data: { content?: string; keywords?: string; difficulty?: string }) => {
+  const handleUpdateQuestion = async (questionId: number, data: { content?: string; keywords?: string; question_type?: string }) => {
     try {
       await api.updateQuestion(questionId, data);
       setEditingQuestion(null);
@@ -868,15 +865,11 @@ export default function ExamDetailPage() {
                         <h3 className="text-lg font-semibold text-[#202124]">
                           Câu hỏi {index + 1}
                         </h3>
-                        {question.difficulty && (
-                        <span className={`px-2 py-1 text-xs font-semibold ${
-                          question.difficulty === 'EASY' ? 'bg-green-100 text-green-800' :
-                          question.difficulty === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {question.difficulty}
-                        </span>
-                      )}
+                        {question.question_type && (
+                          <span className="px-2 py-1 text-xs font-semibold bg-blue-50 text-blue-800 rounded">
+                            {question.question_type}
+                          </span>
+                        )}
                       <span className={`px-2 py-1 text-xs font-semibold ${
                         question.status === 'draft' ? 'bg-gray-100 text-gray-800' :
                         question.status === 'approved' ? 'bg-green-100 text-green-800' :
