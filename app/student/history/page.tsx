@@ -7,8 +7,26 @@ import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
+type HistoryItem = {
+  id?: string;
+  log_file: string;
+  result_file?: string | null;
+  status: 'pending' | 'done';
+  candidate_name?: string;
+  created_at?: string;
+  session_type?: string;
+  course_name?: string;
+  score_total?: number | null;
+  session_name?: string;
+  summary?: {
+    type?: string;
+    overall_score?: number | null;
+    overall_feedback?: string | any;
+  };
+};
+
 export default function HistoryPage() {
-  const [items, setItems] = useState<Array<{ log_file: string; result_file?: string | null; status: 'pending' | 'done'; summary?: any }>>([]);
+  const [items, setItems] = useState<HistoryItem[]>([]);
   const [filterType, setFilterType] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,7 +79,7 @@ export default function HistoryPage() {
     hiring_recommendation?: string;
   });
 
-  const handleView = (it: any) => {
+  const handleView = (it: HistoryItem) => {
     if (it.status === 'done' && it.result_file) {
       // Go to pretty result page using student_session_id
       router.push(`/student/results/${encodeURIComponent(it.result_file)}`);

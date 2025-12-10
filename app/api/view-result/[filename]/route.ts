@@ -3,10 +3,10 @@ export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
-export async function GET(_: Request, ctx: { params: Promise<{ filename: string }> | { filename: string } }) {
+export async function GET(_: Request, ctx: { params: Promise<{ filename: string }> }) {
   try {
-    const p: any = (typeof (ctx as any).params?.then === 'function') ? await (ctx as any).params : (ctx as any).params;
-    const studentSessionId = (p.filename as string);
+    const resolvedParams = await ctx.params;
+    const studentSessionId = resolvedParams.filename;
     
     if (!studentSessionId) {
       return Response.json(
