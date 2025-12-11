@@ -371,13 +371,24 @@ export const api = {
     return handleResponse(response);
   },
 
-  async submitAnswer(studentSessionId: number, questionId: number, answer: string) {
+  async submitAnswer(
+    studentSessionId: number,
+    question: { question_id?: number; question_interview_id?: number },
+    answer: string
+  ) {
+    const payload: any = { answer };
+    if (question.question_interview_id) {
+      payload.question_interview_id = question.question_interview_id;
+    }
+    if (question.question_id) {
+      payload.question_id = question.question_id;
+    }
     const response = await makeAuthenticatedRequest(
       `${BASE}/api/student-sessions/${studentSessionId}/answer`,
       {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ question_id: questionId, answer }),
+        body: JSON.stringify(payload),
         cache: 'no-store',
       }
     );

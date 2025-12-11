@@ -51,9 +51,24 @@ export default function ResultDetailPage() {
             attitude: 0
           },
           details: (d.answers || []).map((answer: any) => ({
-            question_id: answer.question_id,
-            score: answer.ai_score || answer.lecturer_score || 0,
-            notes: answer.ai_feedback || answer.lecturer_feedback || '',
+            question_id: answer.question_interview_id || answer.question_id,
+            score: typeof answer.ai_score === 'object'
+              ? (answer.ai_score?.overall_score ?? 0)
+              : (answer.ai_score ?? answer.lecturer_score ?? 0),
+            notes: (() => {
+              const fb = answer.ai_feedback || answer.lecturer_feedback || '';
+              if (!fb) return '';
+              if (typeof fb === 'string') return fb;
+              const parts: string[] = [];
+              if (fb.feedback) parts.push(fb.feedback);
+              if (Array.isArray(fb.strengths) && fb.strengths.length) {
+                parts.push(`Điểm mạnh: ${fb.strengths.join(', ')}`);
+              }
+              if (Array.isArray(fb.weaknesses) && fb.weaknesses.length) {
+                parts.push(`Điểm yếu: ${fb.weaknesses.join(', ')}`);
+              }
+              return parts.join('\n\n');
+            })(),
             question: answer.question || '',
             answer: answer.answer || answer.answer_text || ''
           })),
@@ -114,8 +129,35 @@ export default function ResultDetailPage() {
     strengths?: string; 
     weaknesses?: string; 
     hiring_recommendation?: string;
+    recommendations?: string[];
+    feedback?: string;
   } | undefined;
   const feedback: FeedbackType = typeof summary === 'string' ? summary : (summary as any);
+
+  const renderFeedback = (fb: FeedbackType) => {
+    if (!fb) return '-';
+    if (typeof fb === 'string') return fb;
+    const parts: string[] = [];
+    if (fb.overall_feedback) parts.push(fb.overall_feedback);
+    if ((fb as any).feedback) parts.push((fb as any).feedback);
+    if (Array.isArray((fb as any).strengths) && (fb as any).strengths.length) {
+      parts.push(`Điểm mạnh: ${(fb as any).strengths.join(', ')}`);
+    } else if (typeof fb.strengths === 'string') {
+      parts.push(`Điểm mạnh: ${fb.strengths}`);
+    }
+    if (Array.isArray((fb as any).weaknesses) && (fb as any).weaknesses.length) {
+      parts.push(`Điểm yếu: ${(fb as any).weaknesses.join(', ')}`);
+    } else if (typeof fb.weaknesses === 'string') {
+      parts.push(`Điểm yếu: ${fb.weaknesses}`);
+    }
+    if (Array.isArray((fb as any).recommendations) && (fb as any).recommendations.length) {
+      parts.push(`Khuyến nghị: ${(fb as any).recommendations.join(', ')}`);
+    }
+    if ((fb as any).hiring_recommendation) {
+      parts.push(`Đề xuất tuyển dụng: ${(fb as any).hiring_recommendation}`);
+    }
+    return parts.join('\n\n') || '-';
+  };
 
   return (
     <div className="min-h-screen">

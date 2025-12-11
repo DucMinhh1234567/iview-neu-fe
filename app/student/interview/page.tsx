@@ -7,7 +7,8 @@ import Footer from '@/components/Footer';
 import { api } from '@/lib/api';
 
 interface Question {
-  question_id: number;
+  question_id?: number;
+  question_interview_id?: number;
   question: string;
   question_number?: number;
   total_questions?: number;
@@ -53,7 +54,7 @@ function InterviewContent() {
       setError('');
       const result = await api.getNextQuestion(sessionId);
       
-      if (result.completed || !result.question_id) {
+      if (result.completed || !(result.question_id || result.question_interview_id)) {
         setCompleted(true);
         setLoading(false);
         return;
@@ -62,6 +63,7 @@ function InterviewContent() {
       // Transform response to match our Question interface
       const question: Question = {
         question_id: result.question_id,
+        question_interview_id: result.question_interview_id,
         question: result.question || result.text || '',
         question_number: result.question_number,
         total_questions: result.total_questions,
@@ -95,7 +97,7 @@ function InterviewContent() {
       // Submit current answer
       await api.submitAnswer(
         studentSessionId,
-        currentQuestion.question_id,
+        { question_id: currentQuestion.question_id, question_interview_id: currentQuestion.question_interview_id },
         currentAnswer
       );
 
@@ -123,7 +125,7 @@ function InterviewContent() {
         // Submit final answer if there's one
         await api.submitAnswer(
           studentSessionId,
-          currentQuestion.question_id,
+          { question_id: currentQuestion.question_id, question_interview_id: currentQuestion.question_interview_id },
           currentAnswer
         );
       } catch (err) {
