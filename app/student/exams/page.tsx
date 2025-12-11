@@ -146,13 +146,13 @@ export default function ExamsPage() {
         </p>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-none mb-6">
             {error}
           </div>
         )}
 
-        <div className="bg-white border border-gray-200 shadow-sm p-3 flex gap-3 items-center mb-6 flex-wrap">
-          <div className="max-w-[260px]">
+        <div className="bg-white border border-gray-200 shadow-sm p-3 flex gap-3 items-center mb-6 flex-wrap rounded-none">
+          <div className="w-[260px]">
             <CustomSelect
               value={subjectFilter}
               onChange={setSubjectFilter}
@@ -164,6 +164,7 @@ export default function ExamsPage() {
                 }))
               ]}
               placeholder="-- Chọn học phần --"
+              className="truncate"
             />
           </div>
           <input 
@@ -171,7 +172,7 @@ export default function ExamsPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Tìm theo tên kỳ thi..."
-            className="flex-1 px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0065ca] max-w-[260px]"
+            className="flex-1 px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0065ca] max-w-[260px] rounded-none"
           />
         </div>
 
@@ -189,7 +190,7 @@ export default function ExamsPage() {
         ) : (
           <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5">
             {filteredExams.map((exam) => (
-              <article key={exam.session_id} className="bg-white border border-gray-200 shadow-sm p-4.5 transition-all hover:-translate-y-1 hover:shadow-md hover:border-[#0065ca] rounded-lg">
+              <article key={exam.session_id} className="bg-white border border-gray-200 shadow-sm p-4.5 transition-all hover:-translate-y-1 hover:shadow-md hover:border-[#0065ca] rounded-none">
                 <div className="text-lg font-semibold text-[#202124] mb-1.5">{exam.session_name}</div>
                 {exam.course_name && (
                   <div className="text-sm text-[#0065ca] mb-2 font-medium">{exam.course_name}</div>
@@ -202,7 +203,7 @@ export default function ExamsPage() {
                   <div>Trạng thái: {exam.status === 'ready' ? 'Sẵn sàng' : 'Đang diễn ra'}</div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className={`px-2.5 py-1 text-xs font-semibold uppercase tracking-wide rounded ${
+                  <span className={`px-2.5 py-1 text-xs font-semibold uppercase tracking-wide rounded-none ${
                     exam.status === 'active' 
                       ? 'bg-green-100 text-green-800' 
                       : 'bg-[#eef4ff] text-[#0065ca]'
@@ -211,7 +212,7 @@ export default function ExamsPage() {
                   </span>
                   <button 
                     onClick={() => handleEnterExam(exam)}
-                    className="bg-[#0065ca] text-white px-3 py-2 rounded hover:bg-[#004a95] transition-colors text-sm font-medium"
+                    className="bg-[#0065ca] text-white px-3 py-2 rounded-none hover:bg-[#004a95] transition-colors text-sm font-medium"
                   >
                     Vào thi
                   </button>
@@ -228,7 +229,7 @@ export default function ExamsPage() {
       {selectedExam && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40" onClick={handleClosePasswordModal} />
-          <div className="relative bg-white rounded-lg w-[92%] max-w-md p-6 shadow-xl">
+          <div className="relative bg-white rounded-none w-[92%] max-w-md p-6 shadow-xl">
             <h3 className="text-lg font-semibold mb-2">Nhập mật khẩu kỳ thi</h3>
             <p className="text-gray-700 mb-4">
               Kỳ thi: <span className="font-semibold">{selectedExam.session_name}</span>
@@ -246,7 +247,7 @@ export default function ExamsPage() {
                   setPasswordError('');
                 }}
                 placeholder="Nhập mật khẩu kỳ thi"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
+                className="w-full px-4 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
                 autoFocus
                 disabled={joining}
                 onKeyDown={(e) => {
@@ -264,14 +265,14 @@ export default function ExamsPage() {
               <button 
                 onClick={handleClosePasswordModal}
                 disabled={joining}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors disabled:opacity-50"
+                className="px-4 py-2 border border-gray-300 rounded-none hover:bg-gray-50 transition-colors disabled:opacity-50"
               >
                 Hủy
               </button>
               <button 
                 onClick={handlePasswordSubmit}
                 disabled={joining}
-                className="px-4 py-2 bg-[#0065ca] text-white rounded hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-[#0065ca] text-white rounded-none hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {joining ? 'Đang tham gia...' : 'Vào thi'}
               </button>

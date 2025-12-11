@@ -248,8 +248,40 @@ export default function ExamDetailPage() {
       setGenerating(true);
       setError('');
       await api.generateQuestions(sessionId, numQuestions);
-      await loadSessionDetail();
-      await loadQuestions();
+      
+      // Poll for questions until they are generated
+      let attempts = 0;
+      const maxAttempts = 30; // ~60 seconds with 2s interval
+      const pollInterval = 2000; // 2 seconds
+      
+      const pollForQuestions = async (): Promise<boolean> => {
+        try {
+          const data = await api.getQuestions(sessionId);
+          if (data && data.length > 0) {
+            setQuestions(data);
+            await loadSessionDetail();
+            return true;
+          }
+        } catch (err) {
+          console.error('Poll error:', err);
+        }
+        return false;
+      };
+      
+      while (attempts < maxAttempts) {
+        const questionsReady = await pollForQuestions();
+        if (questionsReady) {
+          break;
+        }
+        attempts++;
+        if (attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, pollInterval));
+        }
+      }
+      
+      if (attempts >= maxAttempts) {
+        setError('Tạo câu hỏi mất thời gian lâu. Vui lòng thử lại hoặc reload trang.');
+      }
     } catch (err) {
       console.error('Failed to generate questions:', err);
       setError(err instanceof Error ? err.message : 'Không thể tạo câu hỏi');
@@ -1044,6 +1076,17 @@ export default function ExamDetailPage() {
           </div>
         )}
       </main>
+
+      {/* Loading Overlay for Generating Questions */}
+      {generating && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 text-center shadow-xl max-w-sm">
+            <div className="w-16 h-16 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-[#202124] mb-2">Đang tạo câu hỏi...</h2>
+            <p className="text-[#5f6368] text-sm">Vui lòng chờ, hệ thống đang xử lý. Quá trình này có thể mất 1-2 phút.</p>
+          </div>
+        </div>
+      )}
 
       <TeacherFooter />
     </div>

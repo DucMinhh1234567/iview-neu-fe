@@ -70,7 +70,7 @@ export default function CustomSelect({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className={selectedOption ? 'text-[#202124]' : 'text-[#5f6368]'}>
+        <span className={`truncate ${selectedOption ? 'text-[#202124]' : 'text-[#5f6368]'}`}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg

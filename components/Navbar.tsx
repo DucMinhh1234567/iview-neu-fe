@@ -190,11 +190,18 @@ export default function Navbar() {
                   )}
                 </Link>
               ) : (
-                <div className="flex items-center gap-2 px-4 py-3 h-full">
-                  <span className="text-sm">
-                    {userName || 'Giảng viên'}
-                  </span>
-                  <span className="text-xs opacity-75">(GV)</span>
+                <div 
+                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-2 group h-full cursor-default hover:bg-white/10 hover:shadow-md`}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold group-hover:bg-white/30 transition-colors">
+                      {userName ? userName.charAt(0).toUpperCase() : 'G'}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold leading-tight">{userName || 'Giảng viên'}</span>
+                      <span className="text-xs opacity-75 leading-tight">(GV)</span>
+                    </div>
+                  </div>
                 </div>
               )}
             </li>

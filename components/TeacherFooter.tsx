@@ -65,8 +65,11 @@ export default function TeacherFooter() {
         </div>
       </div>
       
-      <div className="text-center mt-15 pt-5 border-t border-white/10 text-white/60 text-sm">
-        <p>&copy; 2025 iView - Trường Đại học Kinh tế Quốc dân. All rights reserved.</p>
+      <div className="mt-15 pt-5 border-t border-white/10">
+        <div className="max-w-6xl mx-auto px-5 flex items-center justify-between text-white/60 text-sm">
+          <p className="whitespace-nowrap">Beta 1.0.1</p>
+          <p className="text-center flex-1">&copy; 2025 iView - Trường Đại học Kinh tế Quốc dân. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );
