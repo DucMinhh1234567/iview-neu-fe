@@ -82,16 +82,7 @@ export default function TeacherLoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    // For demo, still allow demo login without backend
-    setUserInfo({
-      isLoggedIn: true,
-      userRole: 'teacher',
-      userEmail: 'teacher@demo.neu.edu.vn',
-      userName: 'Giảng viên Demo',
-    });
-    router.push('/teacher/dashboard');
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10 px-5">
@@ -154,20 +145,6 @@ export default function TeacherLoginPage() {
             className="w-full py-4 bg-[#0065ca] text-white font-semibold uppercase tracking-wide transition-all hover:bg-[#004a95] text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
-          </button>
-
-          <div className="flex items-center text-center text-[#5f6368] my-5">
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-            <span className="px-2.5">hoặc</span>
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-          </div>
-
-          <button 
-            type="button"
-            onClick={handleDemoLogin}
-            className="w-full py-4 bg-[#FFE9A7] text-[#7C5A00] font-semibold uppercase tracking-wide transition-all hover:bg-[#FFE080] text-sm"
-          >
-            👨‍🏫 Đăng nhập Demo (Giảng viên)
           </button>
 
           <div className="text-center text-[#5f6368] mt-5">

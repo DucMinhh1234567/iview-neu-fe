@@ -527,6 +527,29 @@ export default function ExamDetailPage() {
                 )}
               </div>
             </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => alert('Chức năng ẩn kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-gray-500 text-white rounded-none hover:bg-gray-600 transition-colors text-sm font-medium"
+                title="Ẩn kỳ thi"
+              >
+                Ẩn kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng khóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-none hover:bg-yellow-600 transition-colors text-sm font-medium"
+                title="Khóa kỳ thi"
+              >
+                Khóa kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng xóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-red-600 text-white rounded-none hover:bg-red-700 transition-colors text-sm font-medium"
+                title="Xóa kỳ thi"
+              >
+                Xóa kỳ thi
+              </button>
+            </div>
           </div>
         </div>
 
