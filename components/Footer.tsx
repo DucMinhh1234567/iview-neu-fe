@@ -55,6 +55,12 @@ export default function Footer() {
             <a href="https://web.facebook.com/TruongDaiHocKTQD" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
               <i className="fab fa-facebook"></i>
             </a>
+            <a href="#" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
+              <i className="fab fa-linkedin"></i>
+            </a>
+            <a href="#" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
+              <i className="fab fa-youtube"></i>
+            </a>
           </div>
         </div>
       </div>

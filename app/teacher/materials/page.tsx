@@ -37,12 +37,6 @@ export default function MaterialsPage() {
     loadMaterials();
   }, []);
 
-  useEffect(() => {
-    if (showForm) {
-      uploadFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [showForm]);
-
   const loadMaterials = async () => {
     try {
       setLoading(true);
@@ -55,6 +49,12 @@ export default function MaterialsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (showForm) {
+      uploadFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [showForm]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -278,14 +278,16 @@ export default function MaterialsPage() {
         {/* List of materials (cards) */}
         <div className="">
           <h2 className="text-xl font-semibold text-[#202124] mb-6">Tài Liệu Đã Upload</h2>
-          
+
           {loading ? (
-            <div className="text-center py-8">
+            <div className="text-center py-8 bg-white shadow-sm p-8">
               <div className="w-12 h-12 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
               <p className="text-[#5f6368]">Đang tải dữ liệu...</p>
             </div>
           ) : filteredMaterials.length === 0 ? (
-            <p className="text-[#5f6368] text-center py-8">Chưa có tài liệu nào được upload</p>
+            <div className="bg-white shadow-sm p-8">
+              <p className="text-[#5f6368] text-center py-8">Chưa có tài liệu nào được upload</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredMaterials.map((material) => (
