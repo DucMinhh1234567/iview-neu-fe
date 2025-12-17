@@ -34,7 +34,7 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md sticky top-0 z-50 h-14">
+    <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-[100] h-14">
       <Link href="/" className="flex items-center gap-2.5 px-3 h-full transition-all hover:bg-white/10">
         <img 
           src="/logos/logo-neu2.png" 
