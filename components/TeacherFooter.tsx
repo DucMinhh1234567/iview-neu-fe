@@ -55,21 +55,12 @@ export default function TeacherFooter() {
             <a href="https://web.facebook.com/TruongDaiHocKTQD" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
               <i className="fab fa-facebook"></i>
             </a>
-            <a href="#" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
-              <i className="fab fa-linkedin"></i>
-            </a>
-            <a href="#" className="text-white/80 hover:text-white transition-all hover:-translate-y-0.5 text-xl">
-              <i className="fab fa-youtube"></i>
-            </a>
           </div>
         </div>
       </div>
       
-      <div className="mt-15 pt-5 border-t border-white/10 text-white/60 text-sm">
-        <div className="max-w-6xl mx-auto px-5 flex flex-col md:flex-row justify-between items-center gap-2">
-          <p className="text-left">Beta 1.0.1</p>
-          <p className="text-center">&copy; 2025 iView - Trường Đại học Kinh tế Quốc dân. All rights reserved.</p>
-        </div>
+      <div className="text-center mt-15 pt-5 border-t border-white/10 text-white/60 text-sm">
+        <p>&copy; 2025 iView - Trường Đại học Kinh tế Quốc dân. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -21,14 +21,38 @@ export default function StudentRegisterPage() {
     e.preventDefault();
     setError('');
 
-    // Validation
-    if (!email || !password || !confirmPassword || !fullName || !studentCode) {
-      setError('Vui lòng điền đầy đủ thông tin bắt buộc');
+    // Trim tất cả inputs
+    const trimmedFullName = fullName.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedStudentCode = studentCode.trim();
+    const trimmedClassName = className.trim();
+    const trimmedCourseYear = courseYear.trim();
+
+    // Validate từng field cụ thể theo thứ tự
+    if (!trimmedFullName) {
+      setError('Vui lòng nhập họ tên');
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp');
+    if (!trimmedEmail) {
+      setError('Vui lòng nhập email');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setError('Email không hợp lệ');
+      return;
+    }
+
+    if (!trimmedStudentCode) {
+      setError('Vui lòng nhập mã sinh viên');
+      return;
+    }
+
+    if (!password) {
+      setError('Vui lòng nhập mật khẩu');
       return;
     }
 
@@ -37,17 +61,28 @@ export default function StudentRegisterPage() {
       return;
     }
 
+    if (!confirmPassword) {
+      setError('Vui lòng xác nhận mật khẩu');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Mật khẩu xác nhận không khớp');
+      return;
+    }
+
+    // Tất cả validate đã pass, bây giờ mới gọi API
     setLoading(true);
 
     try {
       const response = await api.register({
-        email,
+        email: trimmedEmail,
         password,
-        full_name: fullName,
+        full_name: trimmedFullName,
         role: 'STUDENT',
-        student_code: studentCode,
-        class_name: className || undefined,
-        course_year: courseYear || undefined,
+        student_code: trimmedStudentCode,
+        class_name: trimmedClassName || undefined,
+        course_year: trimmedCourseYear || undefined,
       });
 
       // Registration successful, redirect to login
@@ -133,7 +168,7 @@ export default function StudentRegisterPage() {
                 id="className"
                 value={className}
                 onChange={(e) => setClassName(e.target.value)}
-                placeholder="Ví dụ: K62CACLC1" 
+                placeholder="Ví dụ: Công nghệ thông tin" 
                 className="w-full px-10 py-3.5 border border-[#dfe3ea] transition-all focus:border-[#0065ca] focus:shadow-[0_0_0_2px_rgba(0,101,202,0.25)] focus:outline-none text-[15px]"
               />
             </div>
@@ -148,7 +183,7 @@ export default function StudentRegisterPage() {
                 id="courseYear"
                 value={courseYear}
                 onChange={(e) => setCourseYear(e.target.value)}
-                placeholder="Ví dụ: K62, K63" 
+                placeholder="Chỉ nhập số, VD: 65" 
                 className="w-full px-10 py-3.5 border border-[#dfe3ea] transition-all focus:border-[#0065ca] focus:shadow-[0_0_0_2px_rgba(0,101,202,0.25)] focus:outline-none text-[15px]"
               />
             </div>

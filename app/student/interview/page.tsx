@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -11,10 +11,10 @@ interface Question {
   question: string;
   question_number?: number;
   total_questions?: number;
-  difficulty?: string;
+  question_type?: string;
 }
 
-export default function InterviewPage() {
+function InterviewContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const studentSessionIdParam = searchParams.get('student_session_id');
@@ -65,7 +65,7 @@ export default function InterviewPage() {
         question: result.question || result.text || '',
         question_number: result.question_number,
         total_questions: result.total_questions,
-        difficulty: result.difficulty
+        question_type: result.question_type
       };
 
       setCurrentQuestion(question);
@@ -206,9 +206,9 @@ export default function InterviewPage() {
             <span className="text-sm text-gray-600">
               Câu hỏi {questionNumber} / {totalQuestions}
             </span>
-            {currentQuestion.difficulty && (
+            {currentQuestion.question_type && (
               <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                Độ khó: {currentQuestion.difficulty}
+                Loại câu hỏi: {currentQuestion.question_type}
               </span>
             )}
           </div>
@@ -266,6 +266,21 @@ export default function InterviewPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function InterviewPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
+          <p className="text-[#5f6368]">Đang tải...</p>
+        </div>
+      </div>
+    }>
+      <InterviewContent />
+    </Suspense>
   );
 }
 

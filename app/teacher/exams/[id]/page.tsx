@@ -42,7 +42,7 @@ interface Question {
   session_id: number;
   content: string;
   keywords?: string;
-  difficulty?: string;
+  question_type?: string;
   status: string;
   reference_answer?: string;
   created_at?: string;
@@ -55,12 +55,12 @@ function QuestionEditForm({
   onCancel 
 }: { 
   question: Question; 
-  onSave: (data: { content?: string; keywords?: string; difficulty?: string }) => void; 
+  onSave: (data: { content?: string; keywords?: string; question_type?: string }) => void; 
   onCancel: () => void;
 }) {
   const [content, setContent] = useState(question.content);
   const [keywords, setKeywords] = useState(question.keywords || '');
-  const [difficulty, setDifficulty] = useState(question.difficulty || 'MEDIUM');
+  const [questionType, setQuestionType] = useState(question.question_type || '');
 
   return (
     <div className="space-y-4">
@@ -83,21 +83,18 @@ function QuestionEditForm({
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-[#5f6368] mb-2">Độ khó</label>
-        <CustomSelect
-          value={difficulty}
-          onChange={setDifficulty}
-          options={[
-            { value: 'EASY', label: 'EASY' },
-            { value: 'MEDIUM', label: 'MEDIUM' },
-            { value: 'HARD', label: 'HARD' }
-          ]}
-          placeholder="-- Chọn độ khó --"
+        <label className="block text-sm font-medium text-[#5f6368] mb-2">Loại câu hỏi / Bloom level</label>
+        <input
+          type="text"
+          value={questionType}
+          onChange={(e) => setQuestionType(e.target.value)}
+          placeholder="VD: REMEMBER, APPLY, behavioral, technical..."
+          className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
         />
       </div>
       <div className="flex gap-2">
         <button
-          onClick={() => onSave({ content, keywords, difficulty })}
+          onClick={() => onSave({ content, keywords, question_type: questionType })}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
         >
           Lưu
@@ -253,8 +250,40 @@ export default function ExamDetailPage() {
       setGeneratingOperation('questions');
       setError('');
       await api.generateQuestions(sessionId, numQuestions);
-      await loadSessionDetail();
-      await loadQuestions();
+      
+      // Poll for questions until they are generated
+      let attempts = 0;
+      const maxAttempts = 30; // ~60 seconds with 2s interval
+      const pollInterval = 2000; // 2 seconds
+      
+      const pollForQuestions = async (): Promise<boolean> => {
+        try {
+          const data = await api.getQuestions(sessionId);
+          if (data && data.length > 0) {
+            setQuestions(data);
+            await loadSessionDetail();
+            return true;
+          }
+        } catch (err) {
+          console.error('Poll error:', err);
+        }
+        return false;
+      };
+      
+      while (attempts < maxAttempts) {
+        const questionsReady = await pollForQuestions();
+        if (questionsReady) {
+          break;
+        }
+        attempts++;
+        if (attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, pollInterval));
+        }
+      }
+      
+      if (attempts >= maxAttempts) {
+        setError('Tạo câu hỏi mất thời gian lâu. Vui lòng thử lại hoặc reload trang.');
+      }
     } catch (err) {
       console.error('Failed to generate questions:', err);
       setError(err instanceof Error ? err.message : 'Không thể tạo câu hỏi');
@@ -326,7 +355,7 @@ export default function ExamDetailPage() {
 
 
 
-  const handleUpdateQuestion = async (questionId: number, data: { content?: string; keywords?: string; difficulty?: string }) => {
+  const handleUpdateQuestion = async (questionId: number, data: { content?: string; keywords?: string; question_type?: string }) => {
     try {
       await api.updateQuestion(questionId, data);
       setEditingQuestion(null);
@@ -502,6 +531,29 @@ export default function ExamDetailPage() {
                   <span className="text-[#5f6368] text-sm">{session.course_name}</span>
                 )}
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => alert('Chức năng ẩn kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-gray-500 text-white rounded-none hover:bg-gray-600 transition-colors text-sm font-medium"
+                title="Ẩn kỳ thi"
+              >
+                Ẩn kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng khóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-none hover:bg-yellow-600 transition-colors text-sm font-medium"
+                title="Khóa kỳ thi"
+              >
+                Khóa kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng xóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-red-600 text-white rounded-none hover:bg-red-700 transition-colors text-sm font-medium"
+                title="Xóa kỳ thi"
+              >
+                Xóa kỳ thi
+              </button>
             </div>
           </div>
         </div>
@@ -873,15 +925,11 @@ export default function ExamDetailPage() {
                         <h3 className="text-lg font-semibold text-[#202124]">
                           Câu hỏi {index + 1}
                         </h3>
-                        {question.difficulty && (
-                        <span className={`px-2 py-1 text-xs font-semibold ${
-                          question.difficulty === 'EASY' ? 'bg-green-100 text-green-800' :
-                          question.difficulty === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {question.difficulty}
-                        </span>
-                      )}
+                        {question.question_type && (
+                          <span className="px-2 py-1 text-xs font-semibold bg-blue-50 text-blue-800 rounded">
+                            {question.question_type}
+                          </span>
+                        )}
                       <span className={`px-2 py-1 text-xs font-semibold ${
                         question.status === 'draft' ? 'bg-gray-100 text-gray-800' :
                         question.status === 'approved' ? 'bg-green-100 text-green-800' :
@@ -1056,6 +1104,17 @@ export default function ExamDetailPage() {
           </div>
         )}
       </main>
+
+      {/* Loading Overlay for Generating Questions */}
+      {generating && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 text-center shadow-xl max-w-sm">
+            <div className="w-16 h-16 border-4 border-[#0065ca] border-t-transparent animate-spin mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-[#202124] mb-2">Đang tạo câu hỏi...</h2>
+            <p className="text-[#5f6368] text-sm">Vui lòng chờ, hệ thống đang xử lý. Quá trình này có thể mất 1-2 phút.</p>
+          </div>
+        </div>
+      )}
 
       <TeacherFooter />
       {/* Global overlay for generation operations (questions/answers) */}

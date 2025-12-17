@@ -7,13 +7,11 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export async function GET(
   request: NextRequest,
-  ctx: { params: Promise<{ studentSessionId: string }> | { studentSessionId: string } }
+  ctx: { params: Promise<{ studentSessionId: string }> }
 ) {
   try {
-    const p: any = (typeof (ctx as any).params?.then === 'function') 
-      ? await (ctx as any).params 
-      : (ctx as any).params;
-    const studentSessionId = (p.studentSessionId as string);
+    const resolvedParams = await ctx.params;
+    const studentSessionId = resolvedParams.studentSessionId;
     
     if (!studentSessionId) {
       return Response.json(
@@ -55,7 +53,7 @@ export async function GET(
 
     const data = await response.json();
     // Transform backend response to match expected format
-    // Backend returns: { question_id, question, question_number, total_questions, difficulty }
+    // Backend returns: { question_id, question, question_number, total_questions, question_type }
     // Frontend expects: { id, text/question, ... }
     return Response.json({
       filename: studentSessionId,
@@ -65,7 +63,7 @@ export async function GET(
         text: data.question, // Support both field names
         question_number: data.question_number,
         total_questions: data.total_questions,
-        difficulty: data.difficulty
+        question_type: data.question_type
       }],
       completed: data.completed || false,
       question_number: data.question_number,

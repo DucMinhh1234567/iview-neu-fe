@@ -749,7 +749,7 @@ export const api = {
     return handleResponse(response);
   },
 
-  async updateQuestion(questionId: number, data: { content?: string; keywords?: string; difficulty?: string }) {
+  async updateQuestion(questionId: number, data: { content?: string; keywords?: string; question_type?: string }) {
     const response = await makeAuthenticatedRequest(
       `${BASE}/api/questions/${questionId}`,
       {
