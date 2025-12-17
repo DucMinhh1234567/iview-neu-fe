@@ -43,16 +43,11 @@ export default function UploadCVPage() {
     setError('');
 
     try {
-      // Note: Backend requires cv_url when creating session, but we need session_id to upload CV
-      // Workaround: Create session with placeholder URL, then upload actual file
-      // The backend upload endpoint will store the file and it will be used when generating questions
-      
-      // Step 1: Create interview session with placeholder CV URL
+      // Step 1: Create interview session (CV will be uploaded next)
       const sessionData: any = {
         session_name: sessionName,
         position: jobTitle,
         level: level,
-        cv_url: 'placeholder', // Placeholder - actual file will be uploaded next
       };
 
       if (configType === 'time') {
@@ -179,7 +174,7 @@ export default function UploadCVPage() {
             <input
               type="file"
               id="jd_file"
-              accept=".pdf,.txt,.md,.doc,.docx"
+            accept=".pdf"
               onChange={(e) => setJdFile(e.target.files?.[0] || null)}
               className="w-full px-4 py-2.5 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-[#0065ca]"
             />
