@@ -150,6 +150,12 @@ export default function StudentLoginPage() {
           </div>
         </form>
 
+        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-none">
+          <p className="text-sm text-[#5f6368] text-center mb-2 font-medium">Tài khoản demo:</p>
+          <p className="text-sm text-[#202124] text-center">Email: <span className="font-mono font-semibold">sv1234@gmail.com</span></p>
+          <p className="text-sm text-[#202124] text-center">Mật khẩu: <span className="font-mono font-semibold">sv1234</span></p>
+        </div>
+
         <div className="mt-6 text-center">
           <Link href="/select-role" className="text-[#0065ca] hover:underline text-sm">
             ← Chọn lại vai trò

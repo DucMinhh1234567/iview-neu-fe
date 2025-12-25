@@ -12,6 +12,12 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
+  // Only hide navbar while đang làm bài (luyện tập/phỏng vấn), giữ lại trên trang kỳ thi chi tiết
+  const hideExact = ['/student/interview'];
+  const hidePrefixes: string[] = []; // add specific do/exam routes if cần ẩn thêm
+  const shouldHideNavbar =
+    hideExact.includes(pathname) || hidePrefixes.some((route) => pathname.startsWith(route));
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const userInfo = getUserInfo();
@@ -32,6 +38,10 @@ export default function Navbar() {
   };
 
   const isActive = (path: string) => pathname === path;
+
+  if (shouldHideNavbar) {
+    return null;
+  }
 
   return (
     <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-[100] h-14">
