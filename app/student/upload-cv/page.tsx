@@ -82,7 +82,34 @@ export default function UploadCVPage() {
       // Step 5: Start session (this will generate questions using uploaded files)
       await api.startSession(studentSessionId);
 
-      // Step 6: Redirect to interview page
+      // Step 6: Wait (poll) until questions are available before redirecting
+      try {
+        const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+        const maxAttempts = 30; // ~60s
+        const intervalMs = 2000;
+        let found = false;
+        for (let i = 0; i < maxAttempts; i++) {
+          try {
+            const sessionDetail = await api.getStudentSession(studentSessionId);
+            const arrays = Object.values(sessionDetail || {}).filter(v => Array.isArray(v));
+            if (arrays.some((a: any) => (a as any[]).length > 0)) {
+              found = true;
+              break;
+            }
+          } catch (pollErr) {
+            console.warn('Polling student session for questions failed:', pollErr);
+          }
+          await sleep(intervalMs);
+        }
+
+        if (!found) {
+          setError('Câu hỏi chưa sẵn sàng sau thời gian chờ. Bạn sẽ được chuyển tiếp, vui lòng kiểm tra lại sau.');
+        }
+      } catch (pollErr) {
+        console.warn('Error while waiting for questions:', pollErr);
+      }
+
+      // Step 7: Redirect to interview page
       router.push(`/student/interview?student_session_id=${studentSessionId}`);
     } catch (err) {
       console.error('Error creating interview session:', err);

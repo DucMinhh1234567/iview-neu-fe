@@ -80,16 +80,7 @@ export default function StudentLoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    // For demo, still allow demo login without backend
-    setUserInfo({
-      isLoggedIn: true,
-      userRole: 'student',
-      userEmail: 'student@demo.neu.edu.vn',
-      userName: 'Sinh viên Demo',
-    });
-    router.push('/student/home');
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10 px-5">
@@ -154,24 +145,16 @@ export default function StudentLoginPage() {
             {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
           </button>
 
-          <div className="flex items-center text-center text-[#5f6368] my-5">
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-            <span className="px-2.5">hoặc</span>
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-          </div>
-
-          <button 
-            type="button"
-            onClick={handleDemoLogin}
-            className="w-full py-4 bg-[#C5F7C6] text-[#064C1B] font-semibold uppercase tracking-wide transition-all hover:bg-[#B0E5B1] text-sm"
-          >
-            🎓 Đăng nhập Demo (Sinh viên)
-          </button>
-
           <div className="text-center text-[#5f6368] mt-5">
             Chưa có tài khoản? <Link href="/student/register" className="text-[#0065ca] font-medium hover:underline">Đăng ký ngay</Link>
           </div>
         </form>
+
+        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-none">
+          <p className="text-sm text-[#5f6368] text-center mb-2 font-medium">Tài khoản demo:</p>
+          <p className="text-sm text-[#202124] text-center">Email: <span className="font-mono font-semibold">sv1234@gmail.com</span></p>
+          <p className="text-sm text-[#202124] text-center">Mật khẩu: <span className="font-mono font-semibold">sv1234</span></p>
+        </div>
 
         <div className="mt-6 text-center">
           <Link href="/select-role" className="text-[#0065ca] hover:underline text-sm">

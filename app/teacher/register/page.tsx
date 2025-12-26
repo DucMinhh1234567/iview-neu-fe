@@ -20,14 +20,37 @@ export default function TeacherRegisterPage() {
     e.preventDefault();
     setError('');
 
-    // Validation
-    if (!email || !password || !confirmPassword || !fullName || !lecturerCode) {
-      setError('Vui lòng điền đầy đủ thông tin bắt buộc');
+    // Trim tất cả inputs
+    const trimmedFullName = fullName.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedLecturerCode = lecturerCode.trim();
+    const trimmedDepartment = department.trim();
+
+    // Validate từng field cụ thể theo thứ tự
+    if (!trimmedFullName) {
+      setError('Vui lòng nhập họ tên');
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp');
+    if (!trimmedEmail) {
+      setError('Vui lòng nhập email');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setError('Email không hợp lệ');
+      return;
+    }
+
+    if (!trimmedLecturerCode) {
+      setError('Vui lòng nhập mã giảng viên');
+      return;
+    }
+
+    if (!password) {
+      setError('Vui lòng nhập mật khẩu');
       return;
     }
 
@@ -36,16 +59,27 @@ export default function TeacherRegisterPage() {
       return;
     }
 
+    if (!confirmPassword) {
+      setError('Vui lòng xác nhận mật khẩu');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Mật khẩu xác nhận không khớp');
+      return;
+    }
+
+    // Tất cả validate đã pass, bây giờ mới gọi API
     setLoading(true);
 
     try {
       const response = await api.register({
-        email,
+        email: trimmedEmail,
         password,
-        full_name: fullName,
+        full_name: trimmedFullName,
         role: 'LECTURER',
-        lecturer_code: lecturerCode,
-        department: department || undefined,
+        lecturer_code: trimmedLecturerCode,
+        department: trimmedDepartment || undefined,
       });
 
       // Registration successful, redirect to login

@@ -82,16 +82,7 @@ export default function TeacherLoginPage() {
     }
   };
 
-  const handleDemoLogin = async () => {
-    // For demo, still allow demo login without backend
-    setUserInfo({
-      isLoggedIn: true,
-      userRole: 'teacher',
-      userEmail: 'teacher@demo.neu.edu.vn',
-      userName: 'Giảng viên Demo',
-    });
-    router.push('/teacher/dashboard');
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-10 px-5">
@@ -156,24 +147,16 @@ export default function TeacherLoginPage() {
             {loading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
           </button>
 
-          <div className="flex items-center text-center text-[#5f6368] my-5">
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-            <span className="px-2.5">hoặc</span>
-            <div className="flex-1 border-b border-[#dfe3ea]"></div>
-          </div>
-
-          <button 
-            type="button"
-            onClick={handleDemoLogin}
-            className="w-full py-4 bg-[#FFE9A7] text-[#7C5A00] font-semibold uppercase tracking-wide transition-all hover:bg-[#FFE080] text-sm"
-          >
-            👨‍🏫 Đăng nhập Demo (Giảng viên)
-          </button>
-
           <div className="text-center text-[#5f6368] mt-5">
             Chưa có tài khoản? <Link href="/teacher/register" className="text-[#0065ca] font-medium hover:underline">Đăng ký ngay</Link>
           </div>
         </form>
+
+        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-none">
+          <p className="text-sm text-[#5f6368] text-center mb-2 font-medium">Tài khoản demo:</p>
+          <p className="text-sm text-[#202124] text-center">Email: <span className="font-mono font-semibold">gv1234@gmail.com</span></p>
+          <p className="text-sm text-[#202124] text-center">Mật khẩu: <span className="font-mono font-semibold">gv1234</span></p>
+        </div>
 
         <div className="mt-6 text-center">
           <Link href="/select-role" className="text-[#0065ca] hover:underline text-sm">

@@ -170,6 +170,7 @@ export default function ExamDetailPage() {
   const [editingQuestion, setEditingQuestion] = useState<number | null>(null);
   const [editingAnswer, setEditingAnswer] = useState<number | null>(null);
   const [numQuestions, setNumQuestions] = useState(8);
+  const [generatingOperation, setGeneratingOperation] = useState<string | null>(null);
 
   useEffect(() => {
     if (sessionId) {
@@ -246,6 +247,7 @@ export default function ExamDetailPage() {
     
     try {
       setGenerating(true);
+      setGeneratingOperation('questions');
       setError('');
       await api.generateQuestions(sessionId, numQuestions);
       
@@ -287,6 +289,7 @@ export default function ExamDetailPage() {
       setError(err instanceof Error ? err.message : 'Không thể tạo câu hỏi');
     } finally {
       setGenerating(false);
+      setGeneratingOperation(null);
     }
   };
 
@@ -316,6 +319,7 @@ export default function ExamDetailPage() {
     
     try {
       setGenerating(true);
+      setGeneratingOperation('answers');
       setError('');
       await api.generateAnswers(sessionId);
       await loadSessionDetail();
@@ -325,6 +329,7 @@ export default function ExamDetailPage() {
       setError(err instanceof Error ? err.message : 'Không thể tạo đáp án');
     } finally {
       setGenerating(false);
+      setGeneratingOperation(null);
     }
   };
 
@@ -526,6 +531,29 @@ export default function ExamDetailPage() {
                   <span className="text-[#5f6368] text-sm">{session.course_name}</span>
                 )}
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => alert('Chức năng ẩn kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-gray-500 text-white rounded-none hover:bg-gray-600 transition-colors text-sm font-medium"
+                title="Ẩn kỳ thi"
+              >
+                Ẩn kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng khóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-yellow-500 text-white rounded-none hover:bg-yellow-600 transition-colors text-sm font-medium"
+                title="Khóa kỳ thi"
+              >
+                Khóa kỳ thi
+              </button>
+              <button
+                onClick={() => alert('Chức năng xóa kỳ thi sẽ được thêm sau')}
+                className="px-4 py-2 bg-red-600 text-white rounded-none hover:bg-red-700 transition-colors text-sm font-medium"
+                title="Xóa kỳ thi"
+              >
+                Xóa kỳ thi
+              </button>
             </div>
           </div>
         </div>
@@ -869,7 +897,7 @@ export default function ExamDetailPage() {
                 {/* Generate Answers Button */}
                 {session.status === 'generating_answers' && (
                   <div className="bg-blue-50 border border-blue-200 p-4">
-                    <p className="text-blue-800 mb-2">Đang tạo đáp án tham khảo...</p>
+                    <p className="text-blue-800 mb-2">Tạo đáp án tham khảo</p>
                     <button
                       onClick={handleGenerateAnswers}
                       disabled={generating}
@@ -1089,6 +1117,20 @@ export default function ExamDetailPage() {
       )}
 
       <TeacherFooter />
+      {/* Global overlay for generation operations (questions/answers) */}
+      {generating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-md p-6 flex flex-col items-center gap-4 max-w-sm mx-4">
+            <div className="w-14 h-14 border-4 border-t-transparent border-[#0065ca] rounded-full animate-spin" />
+            <div className="text-center">
+              <p className="font-semibold text-[#202124]">
+                {generatingOperation === 'questions' ? 'Đang sinh câu hỏi...' : generatingOperation === 'answers' ? 'Đang sinh đáp án tham khảo...' : 'Đang xử lý...'}
+              </p>
+              <p className="text-sm text-[#5f6368]">Quá trình có thể mất vài phút. Vui lòng đợi.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

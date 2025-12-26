@@ -245,24 +245,38 @@ function InterviewContent() {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex justify-end">
-          {isLastQuestion ? (
-            <button
-              onClick={handleSubmit}
-              disabled={!currentAnswer.trim() || submitting || submittingAnswer}
-              className="px-6 py-3 bg-[#0065ca] text-white hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? 'Đang nộp...' : 'Hoàn thành phỏng vấn'}
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              disabled={!currentAnswer.trim() || submittingAnswer || submitting}
-              className="px-6 py-3 bg-[#0065ca] text-white hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submittingAnswer ? 'Đang lưu...' : 'Câu tiếp →'}
-            </button>
-          )}
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() => {
+              if (confirm(`Bạn có chắc muốn kết thúc sớm? Bạn đã trả lời ${questionNumber - 1} / ${totalQuestions} câu.`)) {
+                handleSubmit();
+              }
+            }}
+            disabled={submitting || submittingAnswer}
+            className="px-6 py-3 bg-gray-600 text-white hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Kết thúc ngay
+          </button>
+
+          <div>
+            {isLastQuestion ? (
+              <button
+                onClick={handleSubmit}
+                disabled={!currentAnswer.trim() || submitting || submittingAnswer}
+                className="px-6 py-3 bg-[#0065ca] text-white hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? 'Đang nộp...' : 'Hoàn thành phỏng vấn'}
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                disabled={!currentAnswer.trim() || submittingAnswer || submitting}
+                className="px-6 py-3 bg-[#0065ca] text-white hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submittingAnswer ? 'Đang lưu...' : 'Câu tiếp →'}
+              </button>
+            )}
+          </div>
         </div>
       </main>
 

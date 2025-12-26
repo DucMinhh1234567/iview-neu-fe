@@ -6,7 +6,7 @@ export default function SelectRolePage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 px-5 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 px-5 py-12 -mt-14">
       <div className="max-w-5xl w-full">
         {/* Compact Header */}
         <div className="text-center mb-10">

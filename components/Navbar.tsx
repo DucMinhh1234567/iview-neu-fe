@@ -12,6 +12,12 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
+  // Only hide navbar while đang làm bài (luyện tập/phỏng vấn), giữ lại trên trang kỳ thi chi tiết
+  const hideExact = ['/student/interview'];
+  const hidePrefixes: string[] = []; // add specific do/exam routes if cần ẩn thêm
+  const shouldHideNavbar =
+    hideExact.includes(pathname) || hidePrefixes.some((route) => pathname.startsWith(route));
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const userInfo = getUserInfo();
@@ -33,8 +39,12 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path;
 
+  if (shouldHideNavbar) {
+    return null;
+  }
+
   return (
-    <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md sticky top-0 z-50 h-14">
+    <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-[100] h-14">
       <Link href="/" className="flex items-center gap-2.5 px-3 h-full transition-all hover:bg-white/10">
         <img 
           src="/logos/logo-neu2.png" 
@@ -170,39 +180,35 @@ export default function Navbar() {
               {userRole === 'student' ? (
                 <Link 
                   href="/student/dashboard"
-                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-2 group h-full ${
-                    pathname.startsWith('/student/dashboard') 
-                      ? 'bg-white/20 shadow-lg' 
-                      : 'hover:bg-white/10 hover:shadow-md'
-                  }`}
+                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-3 group h-full hover:bg-white/10 hover:shadow-md`}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold group-hover:bg-white/30 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center text-xs font-semibold text-white group-hover:from-white/30 transition-all">
                       {userName ? userName.charAt(0).toUpperCase() : 'S'}
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold leading-tight">{userName || 'Sinh viên'}</span>
-                      <span className="text-xs opacity-75 leading-tight">(SV)</span>
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-sm font-semibold">{userName || 'Sinh viên'}</span>
+                      <span className="text-xs opacity-75">SV</span>
                     </div>
                   </div>
-                  {pathname.startsWith('/student/dashboard') && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-full"></span>
-                  )}
+                  
                 </Link>
               ) : (
-                <div 
-                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-2 group h-full cursor-default hover:bg-white/10 hover:shadow-md`}
+                <Link
+                  href="/teacher/dashboard"
+                  className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-3 group h-full hover:bg-white/10 hover:shadow-md`}
                 >
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold group-hover:bg-white/30 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-white/20 to-white/10 flex items-center justify-center text-xs font-semibold text-white group-hover:from-white/30 transition-all" style={{background: 'linear-gradient(135deg,#fff1e6, #ffdca8)'}}>
                       {userName ? userName.charAt(0).toUpperCase() : 'G'}
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold leading-tight">{userName || 'Giảng viên'}</span>
-                      <span className="text-xs opacity-75 leading-tight">(GV)</span>
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-sm font-semibold">{userName || 'Giảng viên'}</span>
+                      <span className="text-xs opacity-75">GV</span>
                     </div>
                   </div>
-                </div>
+                  
+                </Link>
               )}
             </li>
             <li className="flex items-stretch h-full ml-4">

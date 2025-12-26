@@ -25,6 +25,7 @@ export default function CreateExamSessionPage() {
   const [language, setLanguage] = useState<'vietnamese' | 'english'>('vietnamese');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [waitingForQuestions, setWaitingForQuestions] = useState(false);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loadingMaterials, setLoadingMaterials] = useState(true);
 
@@ -157,7 +158,37 @@ export default function CreateExamSessionPage() {
       // Step 3: Start session (this will generate questions)
       await api.startSession(studentSessionId);
 
-      // Step 4: Redirect to interview page
+      // Step 4: Wait (poll) until questions are available for this student session
+      try {
+        setWaitingForQuestions(true);
+        const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
+        const maxAttempts = 30; // ~60s
+        const intervalMs = 2000;
+        let found = false;
+        for (let i = 0; i < maxAttempts; i++) {
+          try {
+            const sessionDetail = await api.getStudentSession(studentSessionId);
+            // Try to detect questions array in response
+            const arrays = Object.values(sessionDetail || {}).filter(v => Array.isArray(v));
+            if (arrays.some((a: any) => (a as any[]).length > 0)) {
+              found = true;
+              break;
+            }
+          } catch (pollErr) {
+            console.warn('Polling student session for questions failed:', pollErr);
+          }
+          await sleep(intervalMs);
+        }
+
+        if (!found) {
+          // still navigate but set an error message so user knows questions may not be ready
+          setError('Câu hỏi chưa sẵn sàng sau thời gian chờ. Bạn sẽ được chuyển tiếp, vui lòng kiểm tra lại sau.');
+        }
+      } finally {
+        setWaitingForQuestions(false);
+      }
+
+      // Step 5: Redirect to interview page
       router.push(`/student/interview?student_session_id=${studentSessionId}`);
     } catch (err) {
       console.error('Error creating practice session:', err);
@@ -357,16 +388,29 @@ export default function CreateExamSessionPage() {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || waitingForQuestions}
               className="flex-1 px-6 py-2.5 bg-[#0065ca] text-white font-semibold  hover:bg-[#004a95] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Đang tạo...' : 'Tạo buổi luyện tập'}
+              {loading || waitingForQuestions ? 'Đang tạo và chuẩn bị câu hỏi...' : 'Tạo buổi luyện tập'}
             </button>
           </div>
         </form>
       </main>
 
       <Footer />
+
+      {/* Overlay while waiting for questions */}
+      {waitingForQuestions && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-md p-6 flex flex-col items-center gap-4 max-w-sm mx-4">
+            <div className="w-12 h-12 border-4 border-t-transparent border-[#0065ca] rounded-full animate-spin" />
+            <div className="text-center">
+              <p className="font-semibold text-[#202124]">Đang chuẩn bị câu hỏi cho buổi luyện tập...</p>
+              <p className="text-sm text-[#5f6368]">Quá trình có thể mất vài chục giây. Vui lòng đợi.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
