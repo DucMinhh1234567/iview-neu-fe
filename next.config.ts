@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   basePath: '/iview3',
+  assetPrefix: '/iview3',
   images: {
     remotePatterns: [
       {
@@ -9,7 +10,7 @@ const nextConfig: NextConfig = {
         hostname: '**.bing.net',
       },
     ],
-    unoptimized: true, // For development - remove in production
+    unoptimized: true,
   },
 };
 
