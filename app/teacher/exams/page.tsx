@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useBaseRouter } from '@/lib/useBaseRouter';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
-import BaseLink from '@/components/BaseLink';
+import Link from 'next/link';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 
@@ -23,7 +23,7 @@ interface Session {
 }
 
 export default function TeacherExamsPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -158,12 +158,12 @@ export default function TeacherExamsPage() {
                 : 'Không tìm thấy buổi thi nào phù hợp với bộ lọc.'}
             </p>
             {sessions.length === 0 && (
-              <BaseLink 
+              <Link
                 href="/teacher/create-exam"
                 className="inline-block px-8 py-3 bg-slate-900 text-white font-semibold uppercase tracking-wider hover:bg-slate-800 transition-all duration-200 shadow-lg"
               >
                 Tạo Buổi Thi Mới
-              </BaseLink>
+              </Link>
             )}
           </div>
         ) : (
@@ -224,12 +224,12 @@ export default function TeacherExamsPage() {
                   </div>
                   
                   <div className="flex flex-col gap-2 md:flex-row">
-                    <BaseLink 
+                    <Link
                       href={`/teacher/exams/${session.session_id}`}
                       className="px-6 py-2.5 bg-slate-900 text-white font-semibold uppercase tracking-wider hover:bg-slate-800 transition-all duration-200 text-center shadow-md"
                     >
                       Xem chi tiết
-                    </BaseLink>
+                    </Link>
                     <button
                       onClick={() => {
                         // Copy session ID or show details

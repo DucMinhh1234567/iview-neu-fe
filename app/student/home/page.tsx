@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useBaseRouter } from '@/lib/useBaseRouter';
-import BaseLink from '@/components/BaseLink';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getUserInfo } from '@/lib/auth';
 
 export default function StudentHomePage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const [userName, setUserName] = useState<string>('Sinh viên');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -101,18 +101,18 @@ export default function StudentHomePage() {
             <h2 className="text-2xl font-semibold text-red-600 mb-2">Lỗi Quyền Truy Cập</h2>
             <p className="text-gray-700 mb-6">{roleError}</p>
             <div className="flex gap-4 justify-center">
-              <BaseLink 
+              <Link
                 href="/select-role"
                 className="px-6 py-2 bg-[#0065ca] text-white font-semibold hover:bg-[#004a95] transition-colors"
               >
                 Chọn Vai Trò
-              </BaseLink>
-              <BaseLink 
+              </Link>
+              <Link
                 href="/teacher/login"
                 className="px-6 py-2 bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-colors"
               >
                 Đăng Nhập Giảng Viên
-              </BaseLink>
+              </Link>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function StudentHomePage() {
           </div>
           
           <div className="flex flex-wrap justify-center gap-6">
-            <BaseLink 
+            <Link
               href="/student/create-session"
               className="group bg-white text-[#001a33] px-12 py-5 font-semibold text-lg hover:bg-gray-50 transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1 flex items-center gap-3"
             >
@@ -155,13 +155,13 @@ export default function StudentHomePage() {
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </BaseLink>
-            <BaseLink 
+            </Link>
+            <Link
               href="/student/guide"
               className="bg-transparent border-2 border-white/50 text-white px-12 py-5 font-semibold text-lg hover:bg-white/10 hover:border-white transition-all backdrop-blur-sm hover:-translate-y-1"
             >
               Hướng Dẫn Sử Dụng
-            </BaseLink>
+            </Link>
           </div>
           
           {/* Stats Preview */}
@@ -199,7 +199,7 @@ export default function StudentHomePage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {quickActions.map((action, index) => (
-              <BaseLink 
+              <Link
                 key={index}
                 href={action.link}
                 className="group relative bg-white border-2 border-[#e5e7eb] p-12 transition-all hover:border-[#0065ca] hover:shadow-2xl hover:-translate-y-2 shadow-sm"
@@ -220,7 +220,7 @@ export default function StudentHomePage() {
                     </svg>
                   </div>
                 </div>
-              </BaseLink>
+              </Link>
             ))}
           </div>
         </div>
@@ -297,7 +297,7 @@ export default function StudentHomePage() {
           </div>
           
           <div className="mt-16">
-            <BaseLink 
+            <Link
               href="/student/create-session"
               className="group inline-flex items-center gap-3 bg-white text-[#001a33] px-12 py-5 font-semibold text-lg hover:bg-gray-50 transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1"
             >
@@ -305,7 +305,7 @@ export default function StudentHomePage() {
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </BaseLink>
+            </Link>
           </div>
         </div>
       </section>

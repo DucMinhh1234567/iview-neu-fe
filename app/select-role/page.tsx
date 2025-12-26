@@ -1,9 +1,9 @@
 'use client';
 
-import { useBaseRouter } from '@/lib/useBaseRouter';
+import { useRouter } from 'next/navigation';
 
 export default function SelectRolePage() {
-  const router = useBaseRouter();
+  const router = useRouter();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 px-5 py-12 -mt-14">

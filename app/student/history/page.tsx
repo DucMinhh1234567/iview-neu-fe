@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
-import { useBaseRouter } from '@/lib/useBaseRouter';
+import { useRouter } from 'next/navigation';
 
 type HistoryItem = {
   id?: string;
@@ -30,7 +30,7 @@ export default function HistoryPage() {
   const [filterType, setFilterType] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const router = useBaseRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const load = async () => {

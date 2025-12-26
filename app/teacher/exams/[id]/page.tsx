@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
-import BaseLink from '@/components/BaseLink';
+import Link from 'next/link';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 
@@ -152,7 +152,7 @@ function AnswerEditForm({
 }
 
 export default function ExamDetailPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const params = useParams();
   const sessionId = params?.id ? parseInt(params.id as string) : null;
   
@@ -491,12 +491,12 @@ export default function ExamDetailPage() {
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 mb-6">
             {error || 'Không tìm thấy buổi thi'}
           </div>
-          <BaseLink 
+          <Link
             href="/teacher/exams"
             className="text-[#0065ca] hover:underline"
           >
             ← Quay lại danh sách buổi thi
-          </BaseLink>
+          </Link>
         </main>
         <TeacherFooter />
       </div>
@@ -516,12 +516,12 @@ export default function ExamDetailPage() {
       <main className="max-w-7xl mx-auto px-5 py-10">
         {/* Header */}
         <div className="mb-6">
-          <BaseLink 
+          <Link
             href="/teacher/exams"
             className="text-[#0065ca] hover:underline mb-4 inline-block"
           >
             ← Quay lại danh sách buổi thi
-          </BaseLink>
+          </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="text-3xl font-semibold text-[#202124] mb-2">{session.session_name}</h1>
@@ -1088,12 +1088,12 @@ export default function ExamDetailPage() {
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          <BaseLink 
+                          <Link
                             href={`/teacher/review/${student.student_session_id}`}
                             className="text-[#0065ca] hover:underline font-medium"
                           >
                             Review bài thi
-                          </BaseLink>
+                          </Link>
                         </td>
                       </tr>
                     ))}

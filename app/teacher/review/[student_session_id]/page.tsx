@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
-import BaseLink from '@/components/BaseLink';
+import Link from 'next/link';
 import { api } from '@/lib/api';
 
 interface Answer {
@@ -33,7 +33,7 @@ interface StudentSessionDetail {
 }
 
 export default function ReviewStudentSessionPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const params = useParams();
   const studentSessionId = params?.student_session_id ? parseInt(params.student_session_id as string) : null;
   
@@ -190,12 +190,12 @@ export default function ReviewStudentSessionPage() {
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 mb-6">
             {error || 'Không tìm thấy bài thi'}
           </div>
-          <BaseLink 
+          <Link
             href="/teacher/exams"
             className="text-[#0065ca] hover:underline"
           >
             ← Quay lại danh sách buổi thi
-          </BaseLink>
+          </Link>
         </main>
         <TeacherFooter />
       </div>
@@ -209,12 +209,12 @@ export default function ReviewStudentSessionPage() {
       <main className="max-w-7xl mx-auto px-5 py-10">
         {/* Header */}
         <div className="mb-6">
-          <BaseLink 
+          <Link
             href="/teacher/exams"
             className="text-[#0065ca] hover:underline mb-4 inline-block"
           >
             ← Quay lại danh sách buổi thi
-          </BaseLink>
+          </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="text-3xl font-semibold text-[#202124] mb-2">

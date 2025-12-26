@@ -8,7 +8,7 @@ import { api } from '@/lib/api';
 
 export default function WaitPage() {
   const params = useParams<{ log: string }>();
-  const router = useBaseRouter();
+  const router = useRouter();
   const log = decodeURIComponent(params.log);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);

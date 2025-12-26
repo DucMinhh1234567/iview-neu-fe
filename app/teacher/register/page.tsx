@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useBaseRouter } from '@/lib/useBaseRouter';
-import BaseLink from '@/components/BaseLink';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { api } from '@/lib/api';
 
 export default function TeacherRegisterPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -213,14 +213,14 @@ export default function TeacherRegisterPage() {
           </button>
 
           <div className="text-center text-[#5f6368] mt-5">
-            Đã có tài khoản? <BaseLink href="/teacher/login" className="text-[#0065ca] font-medium hover:underline">Đăng nhập ngay</BaseLink>
+            Đã có tài khoản? <Link href="/teacher/login" className="text-[#0065ca] font-medium hover:underline">Đăng nhập ngay</Link>
           </div>
         </form>
 
         <div className="mt-6 text-center">
-          <BaseLink href="/select-role" className="text-[#0065ca] hover:underline text-sm">
+          <Link href="/select-role" className="text-[#0065ca] hover:underline text-sm">
             ← Chọn lại vai trò
-          </BaseLink>
+          </Link>
         </div>
       </div>
     </div>

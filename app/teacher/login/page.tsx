@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useBaseRouter } from '@/lib/useBaseRouter';
-import BaseLink from '@/components/BaseLink';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { api } from '@/lib/api';
 import { setAuthToken, setRefreshToken, setUserInfo, setupAuthCleanup } from '@/lib/auth';
 
 export default function TeacherLoginPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -148,7 +148,7 @@ export default function TeacherLoginPage() {
           </button>
 
           <div className="text-center text-[#5f6368] mt-5">
-            Chưa có tài khoản? <BaseLink href="/teacher/register" className="text-[#0065ca] font-medium hover:underline">Đăng ký ngay</BaseLink>
+            Chưa có tài khoản? <Link href="/teacher/register" className="text-[#0065ca] font-medium hover:underline">Đăng ký ngay</Link>
           </div>
         </form>
 
@@ -159,9 +159,9 @@ export default function TeacherLoginPage() {
         </div>
 
         <div className="mt-6 text-center">
-          <BaseLink href="/select-role" className="text-[#0065ca] hover:underline text-sm">
+          <Link href="/select-role" className="text-[#0065ca] hover:underline text-sm">
             ← Chọn lại vai trò
-          </BaseLink>
+          </Link>
         </div>
       </div>
     </div>

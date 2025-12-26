@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useBaseRouter } from '@/lib/useBaseRouter';
+import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
 import CustomSelect from '@/components/CustomSelect';
@@ -20,7 +20,7 @@ interface Material {
 }
 
 export default function CreateExamPage() {
-  const router = useBaseRouter();
+  const router = useRouter();
   const [examName, setExamName] = useState('');
   const [subjectName, setSubjectName] = useState('');
   const [materialSource, setMaterialSource] = useState<'uploaded' | 'neureader'>('uploaded');

@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BaseLink from '@/components/BaseLink';
+import Link from 'next/link';
 
 export default function GuidePage() {
   const steps = [
@@ -181,7 +181,7 @@ export default function GuidePage() {
           <h2 className="text-2xl font-semibold mb-4">Bắt Đầu Ngay</h2>
           <p className="text-blue-100 mb-6">Sẵn sàng để bắt đầu luyện tập? Tạo buổi phỏng vấn đầu tiên của bạn ngay bây giờ!</p>
           <div className="flex flex-wrap gap-4">
-            <BaseLink 
+            <Link
               href="/student/create-session"
               className="bg-white text-[#0065ca] font-semibold px-6 py-3 hover:bg-blue-50 transition-colors duration-300 flex items-center gap-2"
             >
@@ -189,13 +189,13 @@ export default function GuidePage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </BaseLink>
-            <BaseLink 
+            </Link>
+            <Link
               href="/student/dashboard"
               className="bg-white/10 text-white font-semibold px-6 py-3 hover:bg-white/20 transition-colors duration-300 border border-white/20"
             >
               Xem Dashboard
-            </BaseLink>
+            </Link>
           </div>
         </div>
       </main>
