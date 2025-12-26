@@ -37,6 +37,97 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
+/* Responsive Typography */
+h1 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem); /* 28px - 40px */
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2rem); /* 24px - 32px */
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem); /* 20px - 28px */
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem); /* 18px - 24px */
+}
+
+h5 {
+  font-size: clamp(1rem, 2vw, 1.25rem); /* 16px - 20px */
+}
+
+h6 {
+  font-size: clamp(0.875rem, 1.5vw, 1rem); /* 14px - 16px */
+}
+
+/* Responsive Body Text */
+p, span, div {
+  font-size: clamp(0.875rem, 1.5vw, 1rem); /* 14px - 16px */
+}
+
+/* Tablet and Mobile specific adjustments */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.75rem; /* 28px */
+  }
+  
+  h2 {
+    font-size: 1.5rem; /* 24px */
+  }
+  
+  h3 {
+    font-size: 1.25rem; /* 20px */
+  }
+  
+  h4 {
+    font-size: 1.125rem; /* 18px */
+  }
+  
+  h5 {
+    font-size: 1rem; /* 16px */
+  }
+  
+  h6 {
+    font-size: 0.875rem; /* 14px */
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.5rem; /* 24px */
+  }
+  
+  h2 {
+    font-size: 1.25rem; /* 20px */
+  }
+  
+  h3 {
+    font-size: 1.125rem; /* 18px */
+  }
+  
+  h4 {
+    font-size: 1rem; /* 16px */
+  }
+  
+  h5 {
+    font-size: 0.9375rem; /* 15px */
+  }
+  
+  h6 {
+    font-size: 0.875rem; /* 14px */
+  }
+}
+
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0,101,202,0.25);

@@ -125,7 +125,7 @@ export default function StudentHomePage() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#001a33] via-[#003366] to-[#004a95] text-white py-32 px-5 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#001a33] via-[#003366] to-[#004a95] text-white py-16 sm:py-24 md:py-32 px-4 sm:px-5 overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white blur-3xl"></div>
@@ -137,28 +137,28 @@ export default function StudentHomePage() {
             <div className="inline-block mb-6 px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-light tracking-widest uppercase">
               Hệ Thống Phỏng Vấn AI
             </div>
-            <h1 className="text-6xl md:text-7xl font-light mb-8 tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light mb-6 md:mb-8 tracking-tight leading-tight px-4">
               Chào mừng trở lại,<br />
               <span className="font-normal">{userName}</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-16 opacity-90 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-12 md:mb-16 opacity-90 font-light max-w-3xl mx-auto leading-relaxed px-4">
               Nền tảng luyện tập phỏng vấn và thi vấn đáp trực tuyến với công nghệ AI tiên tiến
             </p>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 px-4">
             <Link
               href="/student/create-session"
-              className="group bg-white text-[#001a33] px-12 py-5 font-semibold text-lg hover:bg-gray-50 transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1 flex items-center gap-3"
+              className="group bg-white text-[#001a33] px-6 sm:px-8 md:px-12 py-4 md:py-5 font-semibold text-sm sm:text-base md:text-lg hover:bg-gray-50 transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1 flex items-center justify-center gap-3"
             >
               <span>Bắt Đầu Luyện Tập Ngay</span>
-              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
             <Link
               href="/student/guide"
-              className="bg-transparent border-2 border-white/50 text-white px-12 py-5 font-semibold text-lg hover:bg-white/10 hover:border-white transition-all backdrop-blur-sm hover:-translate-y-1"
+              className="bg-transparent border-2 border-white/50 text-white px-6 sm:px-8 md:px-12 py-4 md:py-5 font-semibold text-sm sm:text-base md:text-lg hover:bg-white/10 hover:border-white transition-all backdrop-blur-sm hover:-translate-y-1 text-center"
             >
               Hướng Dẫn Sử Dụng
             </Link>
@@ -183,16 +183,16 @@ export default function StudentHomePage() {
       </section>
 
       {/* Quick Actions */}
-      <section className="relative bg-white py-24 px-5">
+      <section className="relative bg-white py-12 sm:py-16 md:py-24 px-4 sm:px-5">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <div className="inline-block mb-4 px-4 py-1 bg-[#0065ca]/10 text-[#0065ca] text-xs font-light tracking-widest uppercase">
               Truy Cập Nhanh
             </div>
-            <h2 className="text-5xl md:text-6xl font-light mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-4 md:mb-6 tracking-tight px-4">
               Bắt Đầu Ngay
             </h2>
-            <p className="text-lg text-[#5f6368] font-light max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-[#5f6368] font-light max-w-2xl mx-auto px-4">
               Chọn một trong các tùy chọn dưới đây để bắt đầu hành trình luyện tập của bạn
             </p>
           </div>
