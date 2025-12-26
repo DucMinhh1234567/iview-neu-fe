@@ -18,12 +18,25 @@ npm run dev
 
 ## 🔗 Kết nối Backend
 
-Frontend proxy tới Flask backend ở `http://localhost:5000` thông qua các route `/api/*` nội bộ, nên không bắt buộc `.env.local`.
-Nếu cần override, có thể thêm:
+Frontend proxy tới Flask backend thông qua các route `/api/*` nội bộ. 
+
+**Development (localhost):**
+- Mặc định: `http://localhost:5000`
+- Có thể override bằng file `.env.local`:
 
 ```
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
+
+**Production (với domain proxy):**
+- Nếu backend được proxy qua cùng domain (ví dụ: `http://fit.neu.edu.vn/iview3/api`):
+  - Có thể để trống (code sẽ sử dụng relative path)
+  - Hoặc set: `NEXT_PUBLIC_API_URL=http://fit.neu.edu.vn/iview3/api`
+  
+- Nếu backend chạy ở server/port riêng:
+  - Set: `NEXT_PUBLIC_API_URL=http://your-backend-url:port`
+
+Xem file `.env.local.example` để biết chi tiết.
 
 ## 📦 Xây dựng Production
 
