@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
-import Link from 'next/link';
+import BaseLink from '@/components/BaseLink';
 import { getUserInfo } from '@/lib/auth';
 
 export default function TeacherDashboardPage() {
@@ -61,7 +61,7 @@ export default function TeacherDashboardPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link
+            <BaseLink 
               href="/teacher/materials"
               className="bg-white p-8 rounded-none shadow-md hover:shadow-xl transition-all hover:-translate-y-1 group border border-transparent hover:border-[#0065ca]"
             >
@@ -74,9 +74,9 @@ export default function TeacherDashboardPage() {
               <p className="text-sm text-[#5f6368] leading-relaxed">
                 Upload và quản lý tài liệu PDF cho sinh viên
               </p>
-            </Link>
+            </BaseLink>
 
-            <Link
+            <BaseLink 
               href="/teacher/create-exam"
               className="bg-white p-8 rounded-none shadow-md hover:shadow-xl transition-all hover:-translate-y-1 group border border-transparent hover:border-[#0065ca]"
             >
@@ -89,9 +89,9 @@ export default function TeacherDashboardPage() {
               <p className="text-sm text-[#5f6368] leading-relaxed">
                 Tạo kỳ thi vấn đáp mới với AI
               </p>
-            </Link>
+            </BaseLink>
 
-            <Link
+            <BaseLink 
               href="/teacher/exams"
               className="bg-white p-8 rounded-none shadow-md hover:shadow-xl transition-all hover:-translate-y-1 group border border-transparent hover:border-[#0065ca]"
             >
@@ -104,9 +104,9 @@ export default function TeacherDashboardPage() {
               <p className="text-sm text-[#5f6368] leading-relaxed">
                 Theo dõi và quản lý các kỳ thi
               </p>
-            </Link>
+            </BaseLink>
 
-            <Link
+            <BaseLink 
               href="/teacher/guide"
               className="bg-white p-8 rounded-none shadow-md hover:shadow-xl transition-all hover:-translate-y-1 group border border-transparent hover:border-[#0065ca]"
             >
@@ -119,7 +119,7 @@ export default function TeacherDashboardPage() {
               <p className="text-sm text-[#5f6368] leading-relaxed">
                 Tìm hiểu cách sử dụng hệ thống
               </p>
-            </Link>
+            </BaseLink>
           </div>
         </section>
 

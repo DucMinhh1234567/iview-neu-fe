@@ -4,7 +4,7 @@ import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 function ReviewContent() {
-  const router = useRouter();
+  const router = useBaseRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {

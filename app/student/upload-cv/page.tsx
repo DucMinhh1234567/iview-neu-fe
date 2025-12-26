@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 
 export default function UploadCVPage() {
-  const router = useRouter();
+  const router = useBaseRouter();
   const [sessionName, setSessionName] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [jdFile, setJdFile] = useState<File | null>(null);

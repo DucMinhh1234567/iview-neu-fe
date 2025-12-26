@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
 import { api } from '@/lib/api';
@@ -19,7 +19,7 @@ interface Material {
 }
 
 export default function MaterialsPage() {
-  const router = useRouter();
+  const router = useBaseRouter();
   const uploadFormRef = useRef<HTMLDivElement>(null);
   const [showForm, setShowForm] = useState(false);
   const [materials, setMaterials] = useState<Material[]>([]);

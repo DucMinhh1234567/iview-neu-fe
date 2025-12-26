@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 
 export default function UploadMaterialPage() {
-  const router = useRouter();
+  const router = useBaseRouter();
 
   useEffect(() => {
     // Redirect to materials page

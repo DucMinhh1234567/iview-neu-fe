@@ -17,7 +17,7 @@ interface Question {
 
 function InterviewContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useBaseRouter();
   const studentSessionIdParam = searchParams.get('student_session_id');
   
   const [studentSessionId, setStudentSessionId] = useState<number | null>(null);

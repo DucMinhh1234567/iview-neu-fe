@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import BaseLink from './BaseLink';
+import { usePathname } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import { getUserInfo, clearAuth } from '@/lib/auth';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useBaseRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-[#004d80] text-white px-6 flex justify-between items-center shadow-md fixed top-0 left-0 right-0 z-[100] h-14">
-      <Link href="/" className="flex items-center gap-2.5 px-3 h-full transition-all hover:bg-white/10">
+      <BaseLink href="/" className="flex items-center gap-2.5 px-3 h-full transition-all hover:bg-white/10">
         <img 
           src="/logos/logo-neu2.png" 
           alt="Logo NEU" 
@@ -54,13 +55,13 @@ export default function Navbar() {
           className="transition-transform hover:scale-105"
         />
         <span className="text-xl font-bold transition-all hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">iView NEU</span>
-      </Link>
+      </BaseLink>
       
       <ul className="flex items-stretch list-none m-0 p-0 h-full">
         {userRole === 'teacher' || userRole === 'lecturer' ? (
           <>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/teacher/dashboard"
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/dashboard') ? 'bg-white/10' : ''
@@ -68,10 +69,10 @@ export default function Navbar() {
               >
                 Trang Chủ
                 {pathname.startsWith('/teacher/dashboard') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/teacher/materials" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/materials') ? 'bg-white/10' : ''
@@ -79,10 +80,10 @@ export default function Navbar() {
               >
                 Tài Liệu
                 {pathname.startsWith('/teacher/materials') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/teacher/create-exam" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/create-exam') ? 'bg-white/10' : ''
@@ -90,10 +91,10 @@ export default function Navbar() {
               >
                 Tạo Buổi Thi
                 {pathname.startsWith('/teacher/create-exam') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/teacher/exams" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/exams') ? 'bg-white/10' : ''
@@ -101,10 +102,10 @@ export default function Navbar() {
               >
                 Kỳ Thi
                 {pathname.startsWith('/teacher/exams') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/teacher/guide" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/teacher/guide') ? 'bg-white/10' : ''
@@ -112,13 +113,13 @@ export default function Navbar() {
               >
                 Hướng Dẫn
                 {pathname.startsWith('/teacher/guide') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
           </>
         ) : (
           <>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href={isLoggedIn && userRole === 'student' ? '/student/home' : '/'}
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   (isActive('/') || isActive('/student/home')) ? 'bg-white/10' : ''
@@ -126,10 +127,10 @@ export default function Navbar() {
               >
                 Trang Chủ
                 {(isActive('/') || isActive('/student/home')) && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/student/create-session" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/create-session') || pathname.startsWith('/student/upload-cv') || pathname.startsWith('/student/create-exam-session') ? 'bg-white/10' : ''
@@ -137,10 +138,10 @@ export default function Navbar() {
               >
                 Tạo Buổi Phỏng Vấn
                 {(pathname.startsWith('/student/create-session') || pathname.startsWith('/student/upload-cv') || pathname.startsWith('/student/create-exam-session')) && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/student/history" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/history') ? 'bg-white/10' : ''
@@ -148,10 +149,10 @@ export default function Navbar() {
               >
                 Lịch Sử
                 {pathname.startsWith('/student/history') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/student/exams" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/exams') ? 'bg-white/10' : ''
@@ -159,10 +160,10 @@ export default function Navbar() {
               >
                 Kỳ Thi
                 {pathname.startsWith('/student/exams') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
             <li className="flex items-stretch h-full">
-              <Link 
+              <BaseLink 
                 href="/student/guide" 
                 className={`px-4 py-3 transition-all font-medium text-sm uppercase tracking-wide relative flex items-center h-full ${
                   pathname.startsWith('/student/guide') ? 'bg-white/10' : ''
@@ -170,7 +171,7 @@ export default function Navbar() {
               >
                 Hướng Dẫn
                 {pathname.startsWith('/student/guide') && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"></span>}
-              </Link>
+              </BaseLink>
             </li>
           </>
         )}
@@ -178,7 +179,7 @@ export default function Navbar() {
           <>
             <li className="flex items-stretch h-full ml-4">
               {userRole === 'student' ? (
-                <Link 
+                <BaseLink 
                   href="/student/dashboard"
                   className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-3 group h-full hover:bg-white/10 hover:shadow-md`}
                 >
@@ -192,9 +193,9 @@ export default function Navbar() {
                     </div>
                   </div>
                   
-                </Link>
+                </BaseLink>
               ) : (
-                <Link
+                <BaseLink
                   href="/teacher/dashboard"
                   className={`relative px-4 py-3 transition-all duration-300 flex items-center gap-3 group h-full hover:bg-white/10 hover:shadow-md`}
                 >
@@ -208,7 +209,7 @@ export default function Navbar() {
                     </div>
                   </div>
                   
-                </Link>
+                </BaseLink>
               )}
             </li>
             <li className="flex items-stretch h-full ml-4">
@@ -222,12 +223,12 @@ export default function Navbar() {
           </>
         ) : (
           <li className="flex items-stretch h-full ml-4">
-            <Link 
+            <BaseLink 
               href="/select-role" 
               className="bg-white text-[#0065ca] font-semibold px-5 py-3 hover:bg-[#f1f5ff] focus:outline-none focus:shadow-[0_0_0_2px_rgba(0,101,202,0.25)] h-full flex items-center"
             >
               Đăng Nhập
-            </Link>
+            </BaseLink>
           </li>
         )}
       </ul>
