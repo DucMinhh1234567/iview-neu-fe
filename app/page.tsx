@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import { getUserInfo } from '@/lib/auth';
 
 export default function HomePage() {
-  const router = useRouter();
+  const router = useBaseRouter();
 
   useEffect(() => {
     // Check if user is logged in (from sessionStorage)

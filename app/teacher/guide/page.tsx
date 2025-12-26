@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import TeacherFooter from '@/components/TeacherFooter';
-import Link from 'next/link';
+import BaseLink from '@/components/BaseLink';
 
 export default function TeacherGuidePage() {
   const steps = [
@@ -200,7 +200,7 @@ export default function TeacherGuidePage() {
           <h2 className="text-2xl font-semibold mb-4">Bắt Đầu Ngay</h2>
           <p className="text-blue-100 mb-6">Sẵn sàng để quản lý các buổi thi? Bắt đầu với việc upload tài liệu hoặc tạo buổi thi đầu tiên!</p>
           <div className="flex flex-wrap gap-4">
-            <Link
+            <BaseLink 
               href="/teacher/upload-material"
               className="bg-white text-[#0065ca] font-semibold px-6 py-3 hover:bg-blue-50 transition-colors duration-300 flex items-center gap-2"
             >
@@ -208,8 +208,8 @@ export default function TeacherGuidePage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
-            <Link
+            </BaseLink>
+            <BaseLink 
               href="/teacher/create-exam"
               className="bg-white/10 text-white font-semibold px-6 py-3 hover:bg-white/20 transition-colors duration-300 border border-white/20 flex items-center gap-2"
             >
@@ -217,8 +217,8 @@ export default function TeacherGuidePage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
-            <Link
+            </BaseLink>
+            <BaseLink 
               href="/teacher/review"
               className="bg-white/10 text-white font-semibold px-6 py-3 hover:bg-white/20 transition-colors duration-300 border border-white/20 flex items-center gap-2"
             >
@@ -226,7 +226,7 @@ export default function TeacherGuidePage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </BaseLink>
           </div>
         </div>
       </main>

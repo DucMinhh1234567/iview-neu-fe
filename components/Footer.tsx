@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import BaseLink from './BaseLink';
 
 export default function Footer() {
   return (
@@ -17,29 +17,29 @@ export default function Footer() {
           <h3 className="text-white mb-6 text-lg uppercase tracking-wide font-semibold">Liên Kết Nhanh</h3>
           <ul className="list-none">
             <li className="mb-3">
-              <Link href="/student/create-session" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
+              <BaseLink href="/student/create-session" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
                 Tạo Buổi Phỏng Vấn
-              </Link>
+              </BaseLink>
             </li>
             <li className="mb-3">
-              <Link href="/student/history" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
+              <BaseLink href="/student/history" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
                 Lịch Sử Phỏng Vấn
-              </Link>
+              </BaseLink>
             </li>
             <li className="mb-3">
-              <Link href="/student/dashboard" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
+              <BaseLink href="/student/dashboard" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
                 Dashboard
-              </Link>
+              </BaseLink>
             </li>
             <li className="mb-3">
-              <Link href="/student/exams" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
+              <BaseLink href="/student/exams" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
                 Kỳ Thi
-              </Link>
+              </BaseLink>
             </li>
             <li className="mb-3">
-              <Link href="/student/guide" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
+              <BaseLink href="/student/guide" className="text-white/80 hover:text-white transition-all hover:pl-1.5 text-[15px]">
                 Hướng Dẫn Sử Dụng
-              </Link>
+              </BaseLink>
             </li>
           </ul>
         </div>

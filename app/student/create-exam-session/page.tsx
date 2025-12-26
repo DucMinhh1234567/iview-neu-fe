@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import CustomSelect from '@/components/CustomSelect';
 import { api } from '@/lib/api';
 
@@ -14,7 +14,7 @@ interface Material {
 }
 
 export default function CreateExamSessionPage() {
-  const router = useRouter();
+  const router = useBaseRouter();
   const [subjectType, setSubjectType] = useState<'select' | 'custom'>('select');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [customSubject, setCustomSubject] = useState('');

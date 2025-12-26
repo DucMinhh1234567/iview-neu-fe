@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CustomSelect from '@/components/CustomSelect';
-import { useRouter } from 'next/navigation';
+import { useBaseRouter } from '@/lib/useBaseRouter';
 import { api } from '@/lib/api';
 
 interface Exam {
@@ -19,7 +19,7 @@ interface Exam {
 }
 
 export default function ExamsPage() {
-  const router = useRouter();
+  const router = useBaseRouter();
   const [exams, setExams] = useState<Exam[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
