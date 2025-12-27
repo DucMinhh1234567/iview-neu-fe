@@ -1,5 +1,8 @@
 const BASE = '';
 
+// Backend API URL - sử dụng biến môi trường hoặc default
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
 // Import auth utilities
 import { getAuthToken as getToken, getRefreshToken, setAuthToken, setRefreshToken, clearAuth } from './auth';
 
@@ -320,7 +323,6 @@ export const api = {
     formData.append('file', file);
     formData.append('session_id', sessionId);
 
-    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
     const response = await makeAuthenticatedRequest(
       `${BACKEND_URL}/api/sessions/interview/upload-jd`,
       {
